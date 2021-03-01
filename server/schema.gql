@@ -3,50 +3,20 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-input CreateMealInput {
-  foodSearch: String!
-  type: MealType!
-}
-
 """
 The javascript `Date` as string. Type represents date and time as the ISO Date string.
 """
 scalar DateTime
 
-type Day {
-  _id: ID!
-  date: DateTime!
-  meals: [Meal]!
-  nutrition: Nutrition!
-  user: User!
-}
-
-type DietProfile {
-  currentWeight: Float
-  gender: Gender
-  goalWeight: Float
-  height: Float
-  startingWeight: Float
-}
-
-input DietProfileInput {
-  currentWeight: Float!
-  gender: Gender!
-  goalWeight: Float!
-  height: Float!
-  startingWeight: Float
-}
-
-type Food {
-  _id: ID!
-  name: String!
-  nutrition: Nutrition!
-  serving: Float!
-}
-
 enum Gender {
   FEMALE
   MALE
+}
+
+type Goals {
+  currentWeight: Float
+  goalWeight: Float
+  startingWeight: Float
 }
 
 input LoginUserInput {
@@ -54,45 +24,10 @@ input LoginUserInput {
   username: String!
 }
 
-type Meal {
-  _id: ID!
-  foods: [Food]!
-  type: MealType!
-}
-
-enum MealType {
-  BREAKFAST
-  DINNER
-  LUNCH
-  SNACKS
-}
-
 type Mutation {
-  createMeal(mealInput: CreateMealInput!): Day!
   loginUser(loginUserInput: LoginUserInput!): UserResponse!
   registerUser(registerUserInput: RegisterUserInput!): UserResponse!
-}
-
-type NutrientObject {
-  nutrientName: String!
-  unitName: String!
-  value: Float!
-}
-
-type Nutrition {
-  calcium: NutrientObject!
-  calories: NutrientObject!
-  carbs: NutrientObject!
-  cholesterol: NutrientObject!
-  fat: NutrientObject!
-  fiber: NutrientObject!
-  iron: NutrientObject!
-  potassium: NutrientObject!
-  protein: NutrientObject!
-  sodium: NutrientObject!
-  sugar: NutrientObject!
-  vitaminA: NutrientObject!
-  vitaminC: NutrientObject!
+  updateUserGoals(userGoalInput: UserGoalsInput!): UserResponse!
 }
 
 type Query {
@@ -100,13 +35,13 @@ type Query {
 }
 
 input RegisterUserInput {
-  about: String
-  avatar: String
   confirmPassword: String!
+  currentWeight: Float
   dateOfBirth: DateTime!
-  dietProfile: DietProfileInput
   email: String!
+  goalWeight: Float
   password: String!
+  startingWeight: Float
   username: String!
 }
 
@@ -115,9 +50,17 @@ type User {
   about: String
   avatar: String
   dateOfBirth: DateTime!
-  dietProfile: DietProfile
   email: String!
+  gender: Gender
+  goals: Goals
+  height: Float
   username: String!
+}
+
+input UserGoalsInput {
+  currentWeight: Float
+  goalWeight: Float
+  startingWeight: Float
 }
 
 type UserResponse {

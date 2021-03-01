@@ -1,10 +1,25 @@
-import { Arg, Mutation, Query, Resolver } from 'type-graphql'
+import {
+	Arg,
+	Ctx,
+	Mutation,
+	Query,
+	Resolver,
+	UseMiddleware,
+} from 'type-graphql'
 import { compare, hash } from 'bcryptjs'
-import { ApolloError, UserInputError } from 'apollo-server-express'
+import {
+	ApolloError,
+	AuthenticationError,
+	UserInputError,
+} from 'apollo-server-express'
 import { generateToken } from '../../utils/generate-token'
-import { LoginUserInput, RegisterUserInput } from './types/user/user-inputs'
-import { UserResponse } from './types/user/user-responses'
+import { LoginUserInput } from './types/user/inputs/login-user'
+import { UserResponse } from './types/user/responses/user-responses'
 import { User, UserModel } from '../entities/user'
+import { RegisterUserInput } from './types/user/inputs/register-user'
+import { UserGoalsInput } from './types/user/inputs/update-goals'
+import { MyContext } from '../../types'
+import { isAuth } from '../../middleware/isAuth'
 
 @Resolver(User)
 export class UserResolver {
@@ -22,9 +37,9 @@ export class UserResolver {
 			password,
 			confirmPassword,
 			dateOfBirth,
-			about,
-			avatar,
-			dietProfile,
+			currentWeight,
+			startingWeight,
+			goalWeight,
 		}: RegisterUserInput
 	): Promise<UserResponse> {
 		try {
@@ -36,9 +51,11 @@ export class UserResolver {
 				password,
 				confirmPassword,
 				dateOfBirth,
-				about,
-				avatar,
-				dietProfile,
+				goals: {
+					currentWeight,
+					goalWeight,
+					startingWeight,
+				},
 			})
 
 			await newUser.save()
@@ -71,6 +88,35 @@ export class UserResolver {
 
 			return {
 				user: user!,
+				token,
+			}
+		} catch (error) {
+			throw new ApolloError(error)
+		}
+	}
+
+	@Mutation(() => UserResponse)
+	@UseMiddleware(isAuth)
+	async updateUserGoals(
+		@Arg('userGoalInput')
+		{ currentWeight, goalWeight, startingWeight }: UserGoalsInput,
+		@Ctx() { payload }: MyContext
+	): Promise<UserResponse> {
+		try {
+			const user = payload
+
+			if (!user) {
+				throw new AuthenticationError('User not found ')
+			}
+			const userProfile = await UserModel.findById(user._id)
+			if (userProfile) {
+				userProfile.goals = { currentWeight, startingWeight, goalWeight }
+				await userProfile.save()
+			}
+
+			const token = generateToken(user)
+			return {
+				user: userProfile!,
 				token,
 			}
 		} catch (error) {

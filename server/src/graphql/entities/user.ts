@@ -1,7 +1,9 @@
 import { prop as Property, getModelForClass } from '@typegoose/typegoose'
-import { ObjectType, Field, ID } from 'type-graphql'
+import { ObjectType, Field, ID, Float } from 'type-graphql'
 import { Types } from 'mongoose'
-import { DietProfile } from './diet-profile'
+import { Gender } from './types/user/enums'
+import { Goals } from './goals'
+import { Ref } from '../../types'
 
 @ObjectType()
 export class User {
@@ -19,6 +21,18 @@ export class User {
 	@Property({ required: true, minlength: 6 })
 	password!: string
 
+	@Field({ nullable: true })
+	@Property()
+	avatar?: string
+
+	@Field(() => Float, { nullable: true })
+	@Property()
+	height!: number
+
+	@Field(() => Gender, { nullable: true })
+	@Property({ enum: Gender })
+	gender?: Gender
+
 	@Field()
 	@Property({ required: true })
 	dateOfBirth!: Date
@@ -27,13 +41,9 @@ export class User {
 	@Property()
 	about?: string
 
-	@Field({ nullable: true })
-	@Property()
-	avatar?: string
-
-	@Field(() => DietProfile, { nullable: true })
-	@Property({ type: () => DietProfile, default: {} })
-	dietProfile?: DietProfile
+	@Field(() => Goals, { nullable: true })
+	@Property({ required: true, _id: false, type: () => Goals })
+	goals?: Ref<Goals>
 }
 
 export const UserModel = getModelForClass(User, {
