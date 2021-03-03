@@ -3,10 +3,37 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-"""
-The javascript `Date` as string. Type represents date and time as the ISO Date string.
-"""
-scalar DateTime
+input AddFoodInput {
+  foodName: String!
+  foodNutrition: NutritionInput
+  serving: Float!
+}
+
+input AddMealInput {
+  food: AddFoodInput!
+  mealNutrition: NutritionInput
+  name: MealName!
+}
+
+type Day {
+  _id: ID!
+  date: String!
+  dayNutrition: Nutrition
+  meals: [Meal]!
+  user: User!
+}
+
+input DeleteMealInput {
+  date: String!
+  name: MealName!
+}
+
+type Food {
+  _id: ID!
+  foodName: String!
+  foodNutrition: Nutrition!
+  serving: Int!
+}
 
 enum Gender {
   FEMALE
@@ -24,10 +51,71 @@ input LoginUserInput {
   username: String!
 }
 
+type Meal {
+  _id: ID!
+  foods: [Food]!
+  mealNutrition: Nutrition
+  name: MealName!
+}
+
+enum MealName {
+  BREAKFAST
+  DINNER
+  LUNCH
+  SNACKS
+}
+
 type Mutation {
+  addMeal(addMealInput: AddMealInput!): Day!
+  deleteMeal(deleteMealInput: DeleteMealInput!): Day!
   loginUser(loginUserInput: LoginUserInput!): UserResponse!
   registerUser(registerUserInput: RegisterUserInput!): UserResponse!
+  updateMeal: Day!
   updateUserGoals(userGoalInput: UserGoalsInput!): UserResponse!
+}
+
+type Nutrient {
+  nutrientName: String!
+  unitName: String!
+  value: Float!
+}
+
+input NutrientInput {
+  nutrientName: String!
+  unitName: String!
+  value: Float!
+}
+
+type Nutrition {
+  calcium: Nutrient
+  calories: Nutrient
+  carbs: Nutrient
+  cholesterol: Nutrient
+  fat: Nutrient
+  fiber: Nutrient
+  iron: Nutrient
+  potassium: Nutrient
+  protein: Nutrient
+  sodium: Nutrient
+  sugar: Nutrient
+  vitaminA: Nutrient
+  vitaminC: Nutrient
+}
+
+input NutritionInput {
+  calcium: NutrientInput
+  calories: NutrientInput
+  carbs: NutrientInput
+  cholesterol: NutrientInput
+  fat: NutrientInput
+  fiber: NutrientInput
+  iron: NutrientInput
+  potassium: NutrientInput
+  protein: NutrientInput
+  sodium: NutrientInput
+  sugar: NutrientInput
+  vitaminA: NutrientInput
+  vitaminC: NutrientInput
 }
 
 type Query {
@@ -37,7 +125,7 @@ type Query {
 input RegisterUserInput {
   confirmPassword: String!
   currentWeight: Float
-  dateOfBirth: DateTime!
+  dateOfBirth: String!
   email: String!
   goalWeight: Float
   password: String!
@@ -49,7 +137,7 @@ type User {
   _id: ID!
   about: String
   avatar: String
-  dateOfBirth: DateTime!
+  dateOfBirth: String!
   email: String!
   gender: Gender
   goals: Goals

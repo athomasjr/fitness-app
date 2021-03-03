@@ -11,11 +11,14 @@ export class User {
 	readonly _id!: Types.ObjectId
 
 	@Field()
-	@Property({ required: true, unique: true, minlength: 4, trim: true })
+	@Property({ required: true, trim: true })
 	username!: string
 
 	@Field()
-	@Property({ required: true, unique: true, trim: true })
+	@Property({
+		required: true,
+		trim: true,
+	})
 	email!: string
 
 	@Property({ required: true, minlength: 6 })
@@ -35,7 +38,7 @@ export class User {
 
 	@Field()
 	@Property({ required: true })
-	dateOfBirth!: Date
+	dateOfBirth!: string
 
 	@Field({ nullable: true })
 	@Property()

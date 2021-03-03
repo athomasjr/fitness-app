@@ -1,4 +1,4 @@
-import { MinLength, MaxLength, IsEmail, IsDate } from 'class-validator'
+import { MinLength, MaxLength, IsEmail } from 'class-validator'
 import { InputType, Field, Float } from 'type-graphql'
 import { IsEmailAlreadyExists } from '../../../../../utils/validators/isEmailAlreadyExists'
 import { IsUserAlreadyExists } from '../../../../../utils/validators/isUserAlreadyExists'
@@ -25,8 +25,7 @@ export class RegisterUserInput implements Partial<User> {
 	email!: string
 
 	@Field()
-	@IsDate()
-	dateOfBirth!: Date
+	dateOfBirth!: string
 
 	@Field(() => Float, { nullable: true })
 	startingWeight!: number
