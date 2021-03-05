@@ -124,12 +124,8 @@ type Query {
 
 input RegisterUserInput {
   confirmPassword: String!
-  currentWeight: Float
-  dateOfBirth: String!
   email: String!
-  goalWeight: Float
   password: String!
-  startingWeight: Float
   username: String!
 }
 
@@ -137,7 +133,7 @@ type User {
   _id: ID!
   about: String
   avatar: String
-  dateOfBirth: String!
+  dateOfBirth: String
   email: String!
   gender: Gender
   goals: Goals
