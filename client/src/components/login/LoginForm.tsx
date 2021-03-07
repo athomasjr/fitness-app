@@ -1,32 +1,30 @@
+import { useHistory } from 'react-router-dom'
 import { Formik } from 'formik'
 import { Form, Button } from 'semantic-ui-react'
-import { useHistory } from 'react-router-dom'
 import {
-	RegisterUserInput,
-	useRegisterUserMutation,
+	LoginUserInput,
+	useLoginUserMutation,
 } from '../../types/generated/graphql'
 import { useAuthContext } from '../../context/auth'
 import FormError from '../form/FormError'
-import { registerUserValues } from './registerValues'
 
-export default function RegisterForm() {
+export default function LoginForm() {
 	const context = useAuthContext()
-	const [registerUser, { loading }] = useRegisterUserMutation()
+	const [loginUser, { loading }] = useLoginUserMutation()
 	const history = useHistory()
 
-	async function register(newUserData: RegisterUserInput, setErrors: Function) {
+	async function login(loginValues: LoginUserInput, setErrors: Function) {
 		try {
-			await registerUser({
+			await loginUser({
 				update(_, { data }) {
 					if (data) {
-						const { registerUser: userData } = data
+						const { loginUser: userData } = data
 						context.login(userData)
 						history.push('/')
 					}
 				},
-
 				variables: {
-					registerUserInput: newUserData,
+					loginUserInput: loginValues,
 				},
 			})
 		} catch (error) {
@@ -43,19 +41,22 @@ export default function RegisterForm() {
 	}
 
 	return (
-		<Formik
-			onSubmit={(data, { setErrors }) => register(data, setErrors)}
-			initialValues={registerUserValues}
+		<Formik<LoginUserInput>
+			initialValues={{
+				username: '',
+				password: '',
+			}}
+			onSubmit={(loginValues, { setErrors }) => login(loginValues, setErrors)}
 		>
-			{({ values, errors, touched, handleSubmit, handleChange }) => (
+			{({ values, handleSubmit, handleChange, errors }) => (
 				<div className='form-container'>
 					<Form
 						error
-						onSubmit={handleSubmit}
 						noValidate
 						className={loading ? 'loading' : ''}
+						onSubmit={handleSubmit}
 					>
-						<h1>Register</h1>
+						<h1>Login</h1>
 						<Form.Input
 							label='Username'
 							placeholder='Username'
@@ -66,16 +67,7 @@ export default function RegisterForm() {
 							onChange={handleChange}
 						/>
 						<FormError name='username' />
-						<Form.Input
-							label='Email'
-							placeholder='Email'
-							name='email'
-							type='email'
-							value={values.email}
-							error={errors.email ? true : false}
-							onChange={handleChange}
-						/>
-						<FormError name='email' />
+
 						<Form.Input
 							label='Password'
 							placeholder='Password'
@@ -86,19 +78,8 @@ export default function RegisterForm() {
 							onChange={handleChange}
 						/>
 						<FormError name='password' />
-						<Form.Input
-							label='Confirm Password'
-							placeholder='Confirm Password'
-							name='confirmPassword'
-							type='password'
-							value={values.confirmPassword}
-							error={errors.confirmPassword ? true : false}
-							onChange={handleChange}
-						/>
-
-						<FormError name='confirmPassword' />
 						<Button type='submit' primary>
-							Register
+							Login
 						</Button>
 					</Form>
 				</div>

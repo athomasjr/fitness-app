@@ -7,6 +7,7 @@ import { AuthProvider } from './context/auth'
 
 import 'semantic-ui-css/semantic.min.css'
 import './App.css'
+import Login from './pages/Login'
 
 export default function Routes() {
 	return (
@@ -16,6 +17,7 @@ export default function Routes() {
 					<Menubar />
 					<Route exact path='/' component={Home} />
 					<Route exact path='/register' component={Register} />
+					<Route exact path='/login' component={Login} />
 				</Container>
 			</Router>
 		</AuthProvider>

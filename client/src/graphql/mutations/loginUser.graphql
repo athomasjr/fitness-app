@@ -1,0 +1,5 @@
+mutation LoginUser($loginUserInput: LoginUserInput!) {
+	loginUser(loginUserInput: $loginUserInput) {
+		...RegularUserResponse
+	}
+}
