@@ -11,6 +11,7 @@ import {
 	ApolloError,
 	AuthenticationError,
 	UserInputError,
+	ValidationError,
 } from 'apollo-server-express'
 import { generateToken } from '../../utils/generate-token'
 import { LoginUserInput } from './types/user/inputs/login-user'
@@ -20,7 +21,6 @@ import { RegisterUserInput } from './types/user/inputs/register-user'
 import { UserGoalsInput } from './types/user/inputs/update-goals'
 import { MyContext } from '../../types'
 import { isAuth } from '../../middleware/isAuth'
-import moment from 'moment'
 
 @Resolver(User)
 export class UserResolver {
@@ -32,33 +32,24 @@ export class UserResolver {
 	@Mutation(() => UserResponse)
 	async registerUser(
 		@Arg('registerUserInput')
-		{
-			username,
-			email,
-			password,
-			confirmPassword,
-			dateOfBirth,
-			currentWeight,
-			startingWeight,
-			goalWeight,
-		}: RegisterUserInput
+		{ username, email, password, confirmPassword }: RegisterUserInput
 	): Promise<UserResponse> {
 		try {
 			password = await hash(password, 12)
 
-			dateOfBirth = moment(dateOfBirth).format('YYYY-MM-DD')
+			// dateOfBirth = moment(dateOfBirth).format('YYYY-MM-DD')
 
 			const newUser = new UserModel({
 				username,
 				email,
 				password,
 				confirmPassword,
-				dateOfBirth,
-				goals: {
-					currentWeight,
-					goalWeight,
-					startingWeight,
-				},
+				// dateOfBirth,
+				// goals: {
+				// 	currentWeight,
+				// 	goalWeight,
+				// 	startingWeight,
+				// },
 			})
 
 			await newUser.save()
@@ -84,7 +75,7 @@ export class UserResolver {
 			const match = await compare(password, user!.password)
 
 			if (!match) {
-				throw new UserInputError('Wrong credentials')
+				throw new AuthenticationError('Wrong credentials')
 			}
 
 			const token = generateToken(user!)

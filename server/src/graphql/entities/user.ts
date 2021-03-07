@@ -36,16 +36,16 @@ export class User {
 	@Property({ enum: Gender })
 	gender?: Gender
 
-	@Field()
-	@Property({ required: true })
-	dateOfBirth!: string
+	@Field({ nullable: true })
+	@Property()
+	dateOfBirth?: string
 
 	@Field({ nullable: true })
 	@Property()
 	about?: string
 
 	@Field(() => Goals, { nullable: true })
-	@Property({ required: true, _id: false, type: () => Goals })
+	@Property({ required: true, _id: false, type: () => Goals, default: {} })
 	goals?: Ref<Goals>
 }
 
