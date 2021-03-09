@@ -3,7 +3,6 @@ import {
 	InMemoryCache,
 	createHttpLink,
 	ApolloProvider,
-	from,
 } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import Routes from '../Routes'

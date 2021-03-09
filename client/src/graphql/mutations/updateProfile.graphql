@@ -1,0 +1,5 @@
+mutation UpdateProfile($updateProfileInput: UpdateProfileInput!) {
+	updateProfile(updateProfileInput: $updateProfileInput) {
+		...RegularUserResponse
+	}
+}

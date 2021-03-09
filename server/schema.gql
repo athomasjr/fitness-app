@@ -77,6 +77,7 @@ type Mutation {
   loginUser(loginUserInput: LoginUserInput!): UserResponse!
   registerUser(registerUserInput: RegisterUserInput!): UserResponse!
   updateMeal: Day!
+  updateProfile(updateProfileInput: UpdateProfileInput!): UserResponse!
   updateUserGoals(userGoalInput: UserGoalsInput!): UserResponse!
 }
 
@@ -135,6 +136,14 @@ input RegisterUserInput {
   gender: Gender!
   password: String!
   username: String!
+}
+
+input UpdateProfileInput {
+  about: String
+  inspiration0: String
+  inspiration1: String
+  inspiration2: String
+  why: String
 }
 
 type User {

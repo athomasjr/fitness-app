@@ -43,7 +43,7 @@ export default function LoginForm() {
 	return (
 		<Formik<LoginUserInput>
 			initialValues={{
-				username: 'user',
+				username: 'antonio',
 				password: '123456',
 			}}
 			onSubmit={(loginValues, { setErrors }) => login(loginValues, setErrors)}

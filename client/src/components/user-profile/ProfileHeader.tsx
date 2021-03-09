@@ -2,6 +2,7 @@ import { Segment, Grid, Button, Card, Image } from 'semantic-ui-react'
 import { User } from '../../types/generated/graphql'
 import Moment from 'react-moment'
 import { capitalize } from '../../utils/helpers/capitalize'
+import { Link } from 'react-router-dom'
 
 interface IProfileHeaderProps {
 	user: User
@@ -47,7 +48,7 @@ export default function ProfileHeader({ user }: IProfileHeaderProps) {
 										{user.username}
 									</Card.Header>
 									{age}
-									<Card.Meta>{user.gender}</Card.Meta>
+									<Card.Meta>{capitalize(user.gender.toLowerCase())}</Card.Meta>
 									<Card.Meta>
 										Member since{' '}
 										<Moment format='MMMM D, YYYY'>{user.createdAt}</Moment>
@@ -57,7 +58,7 @@ export default function ProfileHeader({ user }: IProfileHeaderProps) {
 
 							<Card>
 								<div className='ui two buttons'>
-									<Button basic color='blue'>
+									<Button basic color='blue' as={Link} to='/profile/edit'>
 										Edit Profile
 									</Button>
 									<Button basic color='blue'>

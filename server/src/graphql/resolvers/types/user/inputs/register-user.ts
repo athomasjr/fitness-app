@@ -1,11 +1,4 @@
-import {
-	MinLength,
-	MaxLength,
-	IsEmail,
-	IsNotEmpty,
-	ValidateIf,
-	NotEquals,
-} from 'class-validator'
+import { MinLength, MaxLength, IsEmail, IsNotEmpty } from 'class-validator'
 import { InputType, Field } from 'type-graphql'
 import { IsEmailAlreadyExists } from '../../../../../utils/validators/isEmailAlreadyExists'
 import { IsUserAlreadyExists } from '../../../../../utils/validators/isUserAlreadyExists'

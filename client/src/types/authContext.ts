@@ -17,6 +17,7 @@ export interface IAuthContext extends IAuthState {
 export enum AUTHACTIONENUM {
 	LOGIN = 'LOGIN',
 	LOGOUT = 'LOGOUT',
+	UPDATE = 'UPDATE',
 }
 
 export type AUTHACTIONTYPE =

@@ -11,6 +11,7 @@ import Login from './pages/Login'
 import AuthRoute from './utils/AuthRoute'
 import ProtectedRoute from './utils/ProtectedRoute'
 import UserProfile from './pages/UserProfile'
+import UpdateProfile from './pages/UpdateProfile'
 
 export default function Routes() {
 	return (
@@ -22,6 +23,11 @@ export default function Routes() {
 					<AuthRoute exact path='/register' component={Register} />
 					<AuthRoute exact path='/login' component={Login} />
 					<ProtectedRoute exact path='/profile' component={UserProfile} />
+					<ProtectedRoute
+						exact
+						path='/profile/edit'
+						component={UpdateProfile}
+					/>
 				</Container>
 			</Router>
 		</AuthProvider>

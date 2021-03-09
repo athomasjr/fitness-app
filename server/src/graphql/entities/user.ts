@@ -49,7 +49,14 @@ export class User {
 	why?: string
 
 	@Field(() => [String], { nullable: true })
-	@Property({ type: () => [String] })
+	@Property({
+		type: () => [String],
+		default: [],
+		validate: {
+			validator: (v) => v.length <= 4,
+			message: 'Can only have 3 inspirations',
+		},
+	})
 	inspirations?: string[]
 
 	@Field(() => Goals, { nullable: true })

@@ -28,6 +28,7 @@ export type Mutation = {
   registerUser: UserResponse;
   loginUser: UserResponse;
   updateUserGoals: UserResponse;
+  updateProfile: UserResponse;
 };
 
 
@@ -53,6 +54,11 @@ export type MutationLoginUserArgs = {
 
 export type MutationUpdateUserGoalsArgs = {
   userGoalInput: UserGoalsInput;
+};
+
+
+export type MutationUpdateProfileArgs = {
+  updateProfileInput: UpdateProfileInput;
 };
 
 export type Day = {
@@ -207,9 +213,17 @@ export type UserGoalsInput = {
   goalWeight?: Maybe<Scalars['Float']>;
 };
 
+export type UpdateProfileInput = {
+  about?: Maybe<Scalars['String']>;
+  why?: Maybe<Scalars['String']>;
+  inspiration0?: Maybe<Scalars['String']>;
+  inspiration1?: Maybe<Scalars['String']>;
+  inspiration2?: Maybe<Scalars['String']>;
+};
+
 export type UserFieldsFragment = (
   { __typename?: 'User' }
-  & Pick<User, '_id' | 'username' | 'email' | 'avatar' | 'height' | 'gender' | 'dateOfBirth' | 'about' | 'createdAt' | 'updatedAt'>
+  & Pick<User, '_id' | 'username' | 'email' | 'avatar' | 'height' | 'gender' | 'dateOfBirth' | 'about' | 'inspirations' | 'why' | 'createdAt' | 'updatedAt'>
   & { goals?: Maybe<(
     { __typename?: 'Goals' }
     & Pick<Goals, 'startingWeight' | 'currentWeight' | 'goalWeight'>
@@ -251,6 +265,19 @@ export type RegisterUserMutation = (
   ) }
 );
 
+export type UpdateProfileMutationVariables = Exact<{
+  updateProfileInput: UpdateProfileInput;
+}>;
+
+
+export type UpdateProfileMutation = (
+  { __typename?: 'Mutation' }
+  & { updateProfile: (
+    { __typename?: 'UserResponse' }
+    & RegularUserResponseFragment
+  ) }
+);
+
 export const UserFieldsFragmentDoc = gql`
     fragment UserFields on User {
   _id
@@ -261,6 +288,8 @@ export const UserFieldsFragmentDoc = gql`
   gender
   dateOfBirth
   about
+  inspirations
+  why
   createdAt
   updatedAt
   goals {
@@ -342,3 +371,35 @@ export function useRegisterUserMutation(baseOptions?: Apollo.MutationHookOptions
 export type RegisterUserMutationHookResult = ReturnType<typeof useRegisterUserMutation>;
 export type RegisterUserMutationResult = Apollo.MutationResult<RegisterUserMutation>;
 export type RegisterUserMutationOptions = Apollo.BaseMutationOptions<RegisterUserMutation, RegisterUserMutationVariables>;
+export const UpdateProfileDocument = gql`
+    mutation UpdateProfile($updateProfileInput: UpdateProfileInput!) {
+  updateProfile(updateProfileInput: $updateProfileInput) {
+    ...RegularUserResponse
+  }
+}
+    ${RegularUserResponseFragmentDoc}`;
+export type UpdateProfileMutationFn = Apollo.MutationFunction<UpdateProfileMutation, UpdateProfileMutationVariables>;
+
+/**
+ * __useUpdateProfileMutation__
+ *
+ * To run a mutation, you first call `useUpdateProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateProfileMutation, { data, loading, error }] = useUpdateProfileMutation({
+ *   variables: {
+ *      updateProfileInput: // value for 'updateProfileInput'
+ *   },
+ * });
+ */
+export function useUpdateProfileMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProfileMutation, UpdateProfileMutationVariables>) {
+        return Apollo.useMutation<UpdateProfileMutation, UpdateProfileMutationVariables>(UpdateProfileDocument, baseOptions);
+      }
+export type UpdateProfileMutationHookResult = ReturnType<typeof useUpdateProfileMutation>;
+export type UpdateProfileMutationResult = Apollo.MutationResult<UpdateProfileMutation>;
+export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables>;

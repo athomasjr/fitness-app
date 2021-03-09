@@ -7,6 +7,8 @@ fragment UserFields on User {
 	gender
 	dateOfBirth
 	about
+	inspirations
+	why
 	createdAt
 	updatedAt
 	goals {

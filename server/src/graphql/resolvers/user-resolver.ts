@@ -17,6 +17,7 @@ import { UserGoalsInput } from './types/user/inputs/update-goals'
 import { MyContext } from '../../types'
 import { isAuth } from '../../middleware/isAuth'
 import moment from 'moment'
+import { UpdateProfileInput } from './types/user/inputs/update-profile'
 
 @Resolver(User)
 export class UserResolver {
@@ -112,6 +113,70 @@ export class UserResolver {
 				await userProfile.save()
 			}
 
+			const token = generateToken(user)
+			return {
+				user: userProfile!,
+				token,
+			}
+		} catch (error) {
+			throw new ApolloError(error)
+		}
+	}
+
+	@Mutation(() => UserResponse)
+	@UseMiddleware(isAuth)
+	async updateProfile(
+		@Arg('updateProfileInput')
+		{
+			about,
+			inspiration0,
+			inspiration1,
+			inspiration2,
+			why,
+		}: UpdateProfileInput,
+		@Ctx() { payload }: MyContext
+	): Promise<UserResponse> {
+		try {
+			const user = payload
+
+			if (!user) {
+				throw new AuthenticationError('User not found')
+			}
+
+			const userProfile = await UserModel.findById(user._id)
+
+			if (userProfile) {
+				if (about) {
+					userProfile.about = about
+				}
+				if (why) {
+					userProfile.why = why
+				}
+
+				if (userProfile.inspirations) {
+					if (inspiration0) {
+						userProfile.inspirations[0] = inspiration0
+					}
+
+					if (inspiration1) {
+						userProfile.inspirations[1] = inspiration1
+					}
+
+					if (inspiration2) {
+						userProfile.inspirations[2] = inspiration2
+					}
+				}
+
+				// if (!userProfile.inspirations) {
+				// 	userProfile.inspirations = newInspirations
+				// }
+
+				// if (userProfile.inspirations && newInspirations) {
+				// 	newInspirations.map((i) => userProfile.inspirations?.push(i))
+				// 	// userProfile.inspirations.push(inspirations)
+				// }
+				await userProfile.save()
+			}
 			const token = generateToken(user)
 			return {
 				user: userProfile!,
