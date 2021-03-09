@@ -8,6 +8,9 @@ import { AuthProvider } from './context/auth'
 import 'semantic-ui-css/semantic.min.css'
 import './App.css'
 import Login from './pages/Login'
+import AuthRoute from './utils/AuthRoute'
+import ProtectedRoute from './utils/ProtectedRoute'
+import UserProfile from './pages/UserProfile'
 
 export default function Routes() {
 	return (
@@ -16,8 +19,9 @@ export default function Routes() {
 				<Container>
 					<Menubar />
 					<Route exact path='/' component={Home} />
-					<Route exact path='/register' component={Register} />
-					<Route exact path='/login' component={Login} />
+					<AuthRoute exact path='/register' component={Register} />
+					<AuthRoute exact path='/login' component={Login} />
+					<ProtectedRoute exact path='/profile' component={UserProfile} />
 				</Container>
 			</Router>
 		</AuthProvider>

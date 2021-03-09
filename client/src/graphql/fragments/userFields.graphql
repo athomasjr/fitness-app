@@ -7,6 +7,8 @@ fragment UserFields on User {
 	gender
 	dateOfBirth
 	about
+	createdAt
+	updatedAt
 	goals {
 		startingWeight
 		currentWeight

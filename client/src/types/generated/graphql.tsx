@@ -11,6 +11,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
+  DateTime: any;
 };
 
 export type Query = {
@@ -69,15 +71,20 @@ export type User = {
   email: Scalars['String'];
   avatar?: Maybe<Scalars['String']>;
   height?: Maybe<Scalars['Float']>;
-  gender?: Maybe<Gender>;
-  dateOfBirth?: Maybe<Scalars['String']>;
+  gender: Gender;
+  dateOfBirth: Scalars['String'];
   about?: Maybe<Scalars['String']>;
+  why?: Maybe<Scalars['String']>;
+  inspirations?: Maybe<Array<Scalars['String']>>;
   goals?: Maybe<Goals>;
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export enum Gender {
   Male = 'MALE',
-  Female = 'FEMALE'
+  Female = 'FEMALE',
+  Other = 'OTHER'
 }
 
 export type Goals = {
@@ -86,6 +93,7 @@ export type Goals = {
   currentWeight?: Maybe<Scalars['Float']>;
   goalWeight?: Maybe<Scalars['Float']>;
 };
+
 
 export type Nutrition = {
   __typename?: 'Nutrition';
@@ -184,6 +192,8 @@ export type RegisterUserInput = {
   password: Scalars['String'];
   confirmPassword: Scalars['String'];
   email: Scalars['String'];
+  dateOfBirth: Scalars['String'];
+  gender: Gender;
 };
 
 export type LoginUserInput = {
@@ -199,7 +209,7 @@ export type UserGoalsInput = {
 
 export type UserFieldsFragment = (
   { __typename?: 'User' }
-  & Pick<User, '_id' | 'username' | 'email' | 'avatar' | 'height' | 'gender' | 'dateOfBirth' | 'about'>
+  & Pick<User, '_id' | 'username' | 'email' | 'avatar' | 'height' | 'gender' | 'dateOfBirth' | 'about' | 'createdAt' | 'updatedAt'>
   & { goals?: Maybe<(
     { __typename?: 'Goals' }
     & Pick<Goals, 'startingWeight' | 'currentWeight' | 'goalWeight'>
@@ -251,6 +261,8 @@ export const UserFieldsFragmentDoc = gql`
   gender
   dateOfBirth
   about
+  createdAt
+  updatedAt
   goals {
     startingWeight
     currentWeight

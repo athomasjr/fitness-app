@@ -1,4 +1,4 @@
-import { Formik } from 'formik'
+import { Formik, Field } from 'formik'
 import { Form, Button } from 'semantic-ui-react'
 import { useHistory } from 'react-router-dom'
 import {
@@ -7,7 +7,8 @@ import {
 } from '../../types/generated/graphql'
 import { useAuthContext } from '../../context/auth'
 import FormError from '../form/FormError'
-import { registerUserValues } from './registerValues'
+import { genderOptions, registerUserValues } from './registerValues'
+import MySelect from '../form/MySelect'
 
 export default function RegisterForm() {
 	const context = useAuthContext()
@@ -95,8 +96,29 @@ export default function RegisterForm() {
 							error={errors.confirmPassword ? true : false}
 							onChange={handleChange}
 						/>
-
 						<FormError name='confirmPassword' />
+
+						<Field
+							component={MySelect}
+							label='Gender'
+							options={genderOptions}
+							name='gender'
+							placeholder='Select your gender'
+							value={values.gender}
+						/>
+
+						<FormError name='gender' />
+
+						<Form.Input
+							label='Date of birth'
+							placeholder='CDate of birth'
+							name='dateOfBirth'
+							type='date'
+							value={values.dateOfBirth}
+							error={errors.dateOfBirth ? true : false}
+							onChange={handleChange}
+						/>
+						<FormError name='dateOfBirth' />
 						<Button type='submit' primary>
 							Register
 						</Button>

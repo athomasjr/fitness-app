@@ -13,10 +13,23 @@ export default function Menubar() {
 	}
 
 	const menuBar: JSX.Element = user ? (
-		<Menu pointing secondary size='massive' color='blue'>
+		<Menu
+			pointing
+			secondary
+			size='massive'
+			color='blue'
+			style={{ marginBottom: '5rem' }}
+		>
 			<Menu.Item name={user.user.username} active as={Link} to='/' />
 
 			<Menu.Menu position='right'>
+				<Menu.Item
+					name='profile'
+					active={activeItem === 'profile'}
+					as={Link}
+					to='/profile'
+					onClick={handleLinkClick}
+				/>
 				<Menu.Item name='logout' onClick={logout} />
 			</Menu.Menu>
 		</Menu>
