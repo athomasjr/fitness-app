@@ -30,23 +30,36 @@ export class User {
 
 	@Field(() => Float, { nullable: true })
 	@Property()
-	height!: number
+	height?: number
 
-	@Field(() => Gender, { nullable: true })
-	@Property({ enum: Gender })
-	gender?: Gender
+	@Field(() => Gender)
+	@Property({ enum: Gender, required: true })
+	gender!: Gender
 
-	@Field({ nullable: true })
-	@Property()
-	dateOfBirth?: string
+	@Field()
+	@Property({ required: true })
+	dateOfBirth!: string
 
 	@Field({ nullable: true })
 	@Property()
 	about?: string
 
+	@Field({ nullable: true })
+	@Property()
+	why?: string
+
+	@Field(() => [String], { nullable: true })
+	@Property({ type: () => [String] })
+	inspirations?: string[]
+
 	@Field(() => Goals, { nullable: true })
 	@Property({ required: true, _id: false, type: () => Goals, default: {} })
 	goals?: Ref<Goals>
+
+	@Field()
+	createdAt!: Date
+	@Field()
+	updatedAt!: Date
 }
 
 export const UserModel = getModelForClass(User, {

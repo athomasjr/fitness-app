@@ -15,6 +15,11 @@ input AddMealInput {
   name: MealName!
 }
 
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
 type Day {
   _id: ID!
   date: String!
@@ -38,6 +43,7 @@ type Food {
 enum Gender {
   FEMALE
   MALE
+  OTHER
 }
 
 type Goals {
@@ -124,7 +130,9 @@ type Query {
 
 input RegisterUserInput {
   confirmPassword: String!
+  dateOfBirth: String!
   email: String!
+  gender: Gender!
   password: String!
   username: String!
 }
@@ -133,12 +141,16 @@ type User {
   _id: ID!
   about: String
   avatar: String
-  dateOfBirth: String
+  createdAt: DateTime!
+  dateOfBirth: String!
   email: String!
-  gender: Gender
+  gender: Gender!
   goals: Goals
   height: Float
+  inspirations: [String!]
+  updatedAt: DateTime!
   username: String!
+  why: String
 }
 
 input UserGoalsInput {

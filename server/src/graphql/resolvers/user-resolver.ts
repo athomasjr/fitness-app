@@ -7,12 +7,7 @@ import {
 	UseMiddleware,
 } from 'type-graphql'
 import { compare, hash } from 'bcryptjs'
-import {
-	ApolloError,
-	AuthenticationError,
-	UserInputError,
-	ValidationError,
-} from 'apollo-server-express'
+import { ApolloError, AuthenticationError } from 'apollo-server-express'
 import { generateToken } from '../../utils/generate-token'
 import { LoginUserInput } from './types/user/inputs/login-user'
 import { UserResponse } from './types/user/responses/user-response'
@@ -21,6 +16,7 @@ import { RegisterUserInput } from './types/user/inputs/register-user'
 import { UserGoalsInput } from './types/user/inputs/update-goals'
 import { MyContext } from '../../types'
 import { isAuth } from '../../middleware/isAuth'
+import moment from 'moment'
 
 @Resolver(User)
 export class UserResolver {
@@ -32,19 +28,27 @@ export class UserResolver {
 	@Mutation(() => UserResponse)
 	async registerUser(
 		@Arg('registerUserInput')
-		{ username, email, password, confirmPassword }: RegisterUserInput
+		{
+			username,
+			email,
+			password,
+			dateOfBirth,
+			confirmPassword,
+			gender,
+		}: RegisterUserInput
 	): Promise<UserResponse> {
 		try {
 			password = await hash(password, 12)
 
-			// dateOfBirth = moment(dateOfBirth).format('YYYY-MM-DD')
+			dateOfBirth = moment(dateOfBirth).format('YYYY-MM-DD')
 
 			const newUser = new UserModel({
 				username,
 				email,
 				password,
 				confirmPassword,
-				// dateOfBirth,
+				dateOfBirth,
+				gender,
 				// goals: {
 				// 	currentWeight,
 				// 	goalWeight,
