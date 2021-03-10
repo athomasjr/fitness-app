@@ -3,6 +3,7 @@ import { User } from '../../types/generated/graphql'
 import Moment from 'react-moment'
 import { capitalize } from '../../utils/helpers/capitalize'
 import { Link } from 'react-router-dom'
+import moment from 'moment'
 
 interface IProfileHeaderProps {
 	user: User
@@ -19,15 +20,11 @@ export default function ProfileHeader({ user }: IProfileHeaderProps) {
 				size='small'
 			/>
 		)
+	const dob = moment().diff(moment(user.dateOfBirth), 'years')
 
 	const age =
 		user.dateOfBirth && user.dateOfBirth !== null ? (
-			<Card.Meta>
-				<Moment fromNow ago>
-					{user.dateOfBirth}
-				</Moment>{' '}
-				old
-			</Card.Meta>
+			<Card.Meta>{dob} years old</Card.Meta>
 		) : (
 			<Card.Meta>I haven't answered this yet...</Card.Meta>
 		)

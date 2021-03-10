@@ -11,6 +11,7 @@ export interface IAuthState {
 
 export interface IAuthContext extends IAuthState {
 	login: (userData: UserResponse) => void
+	update: (userData: UserResponse) => void
 	logout: () => void
 }
 
@@ -22,4 +23,5 @@ export enum AUTHACTIONENUM {
 
 export type AUTHACTIONTYPE =
 	| { type: AUTHACTIONENUM.LOGIN; payload: UserResponse }
+	| { type: AUTHACTIONENUM.UPDATE; payload: UserResponse }
 	| { type: AUTHACTIONENUM.LOGOUT }

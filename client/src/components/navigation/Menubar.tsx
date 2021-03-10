@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { Menu } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
-import { useAuthContext } from '../../context/auth'
+import { useAuthContext } from '../../context/auth/auth'
 export default function Menubar() {
 	const { user, logout } = useAuthContext()
 	const pathname = window.location.pathname
 	const path: string = pathname === '/' ? 'home' : pathname.substr(1)
+
 	const [activeItem, setActiveItem] = useState(path)
 
 	function handleLinkClick(e: React.MouseEvent, { name }: any) {
@@ -28,6 +29,15 @@ export default function Menubar() {
 					active={activeItem === 'profile'}
 					as={Link}
 					to='/profile'
+					onClick={handleLinkClick}
+				/>
+				<Menu.Item
+					name='food'
+					active={activeItem === 'food'}
+					// active={}
+					as={Link}
+					to='/food/log'
+					// onClick={(e, data) => setActiveItem(data.name as any)}
 					onClick={handleLinkClick}
 				/>
 				<Menu.Item name='logout' onClick={logout} />

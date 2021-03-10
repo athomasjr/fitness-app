@@ -5,7 +5,7 @@ import {
 	RegisterUserInput,
 	useRegisterUserMutation,
 } from '../../types/generated/graphql'
-import { useAuthContext } from '../../context/auth'
+import { useAuthContext } from '../../context/auth/auth'
 import FormError from '../form/FormError'
 import { genderOptions, registerUserValues } from './registerValues'
 import MySelect from '../form/MySelect'

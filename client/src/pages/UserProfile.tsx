@@ -1,6 +1,6 @@
 import { Grid, Item, Header } from 'semantic-ui-react'
 import ProfileHeader from '../components/user-profile/ProfileHeader'
-import { useAuthContext } from '../context/auth'
+import { useAuthContext } from '../context/auth/auth'
 import { capitalize } from '../utils/helpers/capitalize'
 
 export default function UserProfile() {

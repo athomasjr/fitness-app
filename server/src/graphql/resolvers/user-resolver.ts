@@ -26,6 +26,27 @@ export class UserResolver {
 		return 'hi!'
 	}
 
+	@Query(() => User)
+	@UseMiddleware(isAuth)
+	async user(@Ctx() { payload }: MyContext): Promise<User> {
+		try {
+			const user = payload
+
+			if (!user) {
+				throw new AuthenticationError('User not found ')
+			}
+			const userProfile = await UserModel.findById(user._id)
+
+			if (!userProfile) {
+				throw new AuthenticationError('User not found ')
+			}
+
+			return userProfile
+		} catch (error) {
+			throw new ApolloError(error)
+		}
+	}
+
 	@Mutation(() => UserResponse)
 	async registerUser(
 		@Arg('registerUserInput')

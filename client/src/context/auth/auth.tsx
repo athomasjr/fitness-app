@@ -2,12 +2,12 @@ import { createContext, useReducer, useContext } from 'react'
 import jwtDecode, { JwtPayload } from 'jwt-decode'
 import {
 	AUTHACTIONENUM,
-	AUTHACTIONTYPE,
 	IAuthContext,
 	IAuthState,
 	LocalStorage,
-} from '../types/authContext'
-import { UserResponse } from '../types/generated/graphql'
+} from '../../types/authContext'
+import { UserResponse } from '../../types/generated/graphql'
+import { authReducer } from './authReducer'
 
 const initialState: IAuthState = { user: null }
 
@@ -27,25 +27,9 @@ if (storedUser && typeof storedUser === 'string') {
 const AuthContext = createContext<IAuthContext>({
 	user: null,
 	login: (userDate) => {},
+	update: (userData: UserResponse) => {},
 	logout: () => {},
 })
-
-function authReducer(state: IAuthState, action: AUTHACTIONTYPE) {
-	switch (action.type) {
-		case AUTHACTIONENUM.LOGIN:
-			return {
-				...state,
-				user: action.payload,
-			}
-		case AUTHACTIONENUM.LOGOUT:
-			return {
-				...state,
-				user: null,
-			}
-		default:
-			return state
-	}
-}
 
 function AuthProvider(props: any) {
 	const [state, dispatch] = useReducer(authReducer, initialState)
@@ -53,6 +37,14 @@ function AuthProvider(props: any) {
 	function login(userData: UserResponse) {
 		dispatch({
 			type: AUTHACTIONENUM.LOGIN,
+			payload: userData,
+		})
+		localStorage.setItem(LocalStorage.USER, JSON.stringify(userData))
+	}
+
+	function update(userData: UserResponse) {
+		dispatch({
+			type: AUTHACTIONENUM.UPDATE,
 			payload: userData,
 		})
 		localStorage.setItem(LocalStorage.USER, JSON.stringify(userData))
@@ -66,7 +58,7 @@ function AuthProvider(props: any) {
 	}
 	return (
 		<AuthContext.Provider
-			value={{ user: state.user, login, logout }}
+			value={{ user: state.user, login, update, logout }}
 			{...props}
 		/>
 	)

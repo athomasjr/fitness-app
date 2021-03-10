@@ -1,7 +1,7 @@
 import { Formik } from 'formik'
 import { Form, Button } from 'semantic-ui-react'
 import { useHistory } from 'react-router-dom'
-import { useAuthContext } from '../../context/auth'
+import { useAuthContext } from '../../context/auth/auth'
 import {
 	UpdateProfileInput,
 	useUpdateProfileMutation,
@@ -9,7 +9,7 @@ import {
 import FormError from '../form/FormError'
 
 export default function UpdateProfileForm() {
-	const { user, login } = useAuthContext()
+	const { user, update } = useAuthContext()
 	const history = useHistory()
 	const [updateProfile, { loading }] = useUpdateProfileMutation()
 
@@ -22,18 +22,18 @@ export default function UpdateProfileForm() {
 	const aboutValue = user && user.user.about ? user.user.about : ''
 	const whyValue = user && user.user.why ? user.user.why : ''
 
-	async function update(data: UpdateProfileInput, setErrors: Function) {
+	async function handleUpdate(data: UpdateProfileInput, setErrors: Function) {
 		try {
 			await updateProfile({
+				variables: {
+					updateProfileInput: data,
+				},
 				update(_, { data }) {
 					if (data) {
 						const { updateProfile: userData } = data
-						login(userData)
+						update(userData)
 						history.push('/profile')
 					}
-				},
-				variables: {
-					updateProfileInput: data,
 				},
 			})
 		} catch (error) {
@@ -51,7 +51,7 @@ export default function UpdateProfileForm() {
 
 	return (
 		<Formik<UpdateProfileInput>
-			onSubmit={(data, { setErrors }) => update(data, setErrors)}
+			onSubmit={(data, { setErrors }) => handleUpdate(data, setErrors)}
 			initialValues={{
 				about: aboutValue,
 				why: whyValue,

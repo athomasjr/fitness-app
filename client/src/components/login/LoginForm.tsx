@@ -5,7 +5,7 @@ import {
 	LoginUserInput,
 	useLoginUserMutation,
 } from '../../types/generated/graphql'
-import { useAuthContext } from '../../context/auth'
+import { useAuthContext } from '../../context/auth/auth'
 import FormError from '../form/FormError'
 
 export default function LoginForm() {

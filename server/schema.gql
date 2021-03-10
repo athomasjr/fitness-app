@@ -127,6 +127,7 @@ input NutritionInput {
 
 type Query {
   hello: String!
+  user: User!
 }
 
 input RegisterUserInput {

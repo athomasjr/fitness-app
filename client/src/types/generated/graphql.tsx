@@ -18,7 +18,39 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   hello: Scalars['String'];
+  user: User;
 };
+
+export type User = {
+  __typename?: 'User';
+  _id: Scalars['ID'];
+  username: Scalars['String'];
+  email: Scalars['String'];
+  avatar?: Maybe<Scalars['String']>;
+  height?: Maybe<Scalars['Float']>;
+  gender: Gender;
+  dateOfBirth: Scalars['String'];
+  about?: Maybe<Scalars['String']>;
+  why?: Maybe<Scalars['String']>;
+  inspirations?: Maybe<Array<Scalars['String']>>;
+  goals?: Maybe<Goals>;
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export enum Gender {
+  Male = 'MALE',
+  Female = 'FEMALE',
+  Other = 'OTHER'
+}
+
+export type Goals = {
+  __typename?: 'Goals';
+  startingWeight?: Maybe<Scalars['Float']>;
+  currentWeight?: Maybe<Scalars['Float']>;
+  goalWeight?: Maybe<Scalars['Float']>;
+};
+
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -69,37 +101,6 @@ export type Day = {
   dayNutrition?: Maybe<Nutrition>;
   meals: Array<Maybe<Meal>>;
 };
-
-export type User = {
-  __typename?: 'User';
-  _id: Scalars['ID'];
-  username: Scalars['String'];
-  email: Scalars['String'];
-  avatar?: Maybe<Scalars['String']>;
-  height?: Maybe<Scalars['Float']>;
-  gender: Gender;
-  dateOfBirth: Scalars['String'];
-  about?: Maybe<Scalars['String']>;
-  why?: Maybe<Scalars['String']>;
-  inspirations?: Maybe<Array<Scalars['String']>>;
-  goals?: Maybe<Goals>;
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-};
-
-export enum Gender {
-  Male = 'MALE',
-  Female = 'FEMALE',
-  Other = 'OTHER'
-}
-
-export type Goals = {
-  __typename?: 'Goals';
-  startingWeight?: Maybe<Scalars['Float']>;
-  currentWeight?: Maybe<Scalars['Float']>;
-  goalWeight?: Maybe<Scalars['Float']>;
-};
-
 
 export type Nutrition = {
   __typename?: 'Nutrition';
@@ -278,6 +279,17 @@ export type UpdateProfileMutation = (
   ) }
 );
 
+export type UserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserQuery = (
+  { __typename?: 'Query' }
+  & { user: (
+    { __typename?: 'User' }
+    & UserFieldsFragment
+  ) }
+);
+
 export const UserFieldsFragmentDoc = gql`
     fragment UserFields on User {
   _id
@@ -403,3 +415,35 @@ export function useUpdateProfileMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateProfileMutationHookResult = ReturnType<typeof useUpdateProfileMutation>;
 export type UpdateProfileMutationResult = Apollo.MutationResult<UpdateProfileMutation>;
 export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables>;
+export const UserDocument = gql`
+    query User {
+  user {
+    ...UserFields
+  }
+}
+    ${UserFieldsFragmentDoc}`;
+
+/**
+ * __useUserQuery__
+ *
+ * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUserQuery(baseOptions?: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>) {
+        return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, baseOptions);
+      }
+export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
+          return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, baseOptions);
+        }
+export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
+export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
+export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
