@@ -1,6 +1,7 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator'
 import { Field, InputType, Float } from 'type-graphql'
 import { Food } from '../../../../entities/food'
+import { MealName } from '../../../../entities/types/meal/enums'
 import { NutritionInput } from './nutrition-input'
 
 @InputType()

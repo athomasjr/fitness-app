@@ -1,0 +1,10 @@
+fragment MealFields on Meal {
+	_id
+	name
+	foods {
+		...FoodFields
+	}
+	mealNutrition {
+		...NutritionFields
+	}
+}

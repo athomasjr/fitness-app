@@ -25,21 +25,21 @@ export class NutritionInput implements Partial<Nutrition> {
 	@Field(() => NutrientInput, { nullable: true })
 	sodium!: NutrientInput
 
-	@Field(() => NutrientInput, { nullable: true })
-	calcium!: NutrientInput
+	// @Field(() => NutrientInput, { nullable: true })
+	// calcium!: NutrientInput
 
-	@Field(() => NutrientInput, { nullable: true })
-	iron!: NutrientInput
+	// @Field(() => NutrientInput, { nullable: true })
+	// iron!: NutrientInput
 
-	@Field(() => NutrientInput, { nullable: true })
-	cholesterol!: NutrientInput
+	// @Field(() => NutrientInput, { nullable: true })
+	// cholesterol!: NutrientInput
 
-	@Field(() => NutrientInput, { nullable: true })
-	potassium!: NutrientInput
+	// @Field(() => NutrientInput, { nullable: true })
+	// potassium!: NutrientInput
 
-	@Field(() => NutrientInput, { nullable: true })
-	vitaminA!: NutrientInput
+	// @Field(() => NutrientInput, { nullable: true })
+	// vitaminA!: NutrientInput
 
-	@Field(() => NutrientInput, { nullable: true })
-	vitaminC!: NutrientInput
+	// @Field(() => NutrientInput, { nullable: true })
+	// vitaminC!: NutrientInput
 }

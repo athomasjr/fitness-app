@@ -33,27 +33,27 @@ export class Nutrition {
 	@Property({ type: () => Nutrient })
 	sodium!: Ref<Nutrient>
 
-	@Field(() => Nutrient, { nullable: true })
-	@Property({ type: () => Nutrient })
-	calcium!: Ref<Nutrient>
+	// @Field(() => Nutrient, { nullable: true })
+	// @Property({ type: () => Nutrient })
+	// calcium!: Ref<Nutrient>
 
-	@Field(() => Nutrient, { nullable: true })
-	@Property({ type: () => Nutrient })
-	iron!: Ref<Nutrient>
+	// @Field(() => Nutrient, { nullable: true })
+	// @Property({ type: () => Nutrient })
+	// iron!: Ref<Nutrient>
 
-	@Field(() => Nutrient, { nullable: true })
-	@Property({ type: () => Nutrient })
-	cholesterol!: Ref<Nutrient>
+	// @Field(() => Nutrient, { nullable: true })
+	// @Property({ type: () => Nutrient })
+	// cholesterol!: Ref<Nutrient>
 
-	@Field(() => Nutrient, { nullable: true })
-	@Property({ type: () => Nutrient })
-	potassium!: Ref<Nutrient>
+	// @Field(() => Nutrient, { nullable: true })
+	// @Property({ type: () => Nutrient })
+	// potassium!: Ref<Nutrient>
 
-	@Field(() => Nutrient, { nullable: true })
-	@Property({ type: () => Nutrient })
-	vitaminA!: Ref<Nutrient>
+	// @Field(() => Nutrient, { nullable: true })
+	// @Property({ type: () => Nutrient })
+	// vitaminA!: Ref<Nutrient>
 
-	@Field(() => Nutrient, { nullable: true })
-	@Property({ type: () => Nutrient })
-	vitaminC!: Ref<Nutrient>
+	// @Field(() => Nutrient, { nullable: true })
+	// @Property({ type: () => Nutrient })
+	// vitaminC!: Ref<Nutrient>
 }

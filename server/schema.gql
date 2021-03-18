@@ -10,8 +10,8 @@ input AddFoodInput {
 }
 
 input AddMealInput {
+  date: String!
   food: AddFoodInput!
-  mealNutrition: NutritionInput
   name: MealName!
 }
 
@@ -60,7 +60,7 @@ input LoginUserInput {
 type Meal {
   _id: ID!
   foods: [Food]!
-  mealNutrition: Nutrition
+  mealNutrition: MealNutrition
   name: MealName!
 }
 
@@ -69,6 +69,16 @@ enum MealName {
   DINNER
   LUNCH
   SNACKS
+}
+
+type MealNutrition {
+  calorieTotal: Float
+  carbsTotal: Float
+  fatTotal: Float
+  fiberTotal: Float
+  proteinTotal: Float
+  sodiumTotal: Float
+  sugarTotal: Float
 }
 
 type Mutation {
@@ -94,39 +104,29 @@ input NutrientInput {
 }
 
 type Nutrition {
-  calcium: Nutrient
   calories: Nutrient
   carbs: Nutrient
-  cholesterol: Nutrient
   fat: Nutrient
   fiber: Nutrient
-  iron: Nutrient
-  potassium: Nutrient
   protein: Nutrient
   sodium: Nutrient
   sugar: Nutrient
-  vitaminA: Nutrient
-  vitaminC: Nutrient
 }
 
 input NutritionInput {
-  calcium: NutrientInput
   calories: NutrientInput
   carbs: NutrientInput
-  cholesterol: NutrientInput
   fat: NutrientInput
   fiber: NutrientInput
-  iron: NutrientInput
-  potassium: NutrientInput
   protein: NutrientInput
   sodium: NutrientInput
   sugar: NutrientInput
-  vitaminA: NutrientInput
-  vitaminC: NutrientInput
 }
 
 type Query {
+  day(date: String!): Day!
   hello: String!
+  meals(date: String!): [Meal!]!
   user: User!
 }
 

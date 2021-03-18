@@ -1,0 +1,5 @@
+fragment NutrientFields on Nutrient {
+	nutrientName
+	unitName
+	value
+}

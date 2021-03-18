@@ -1,26 +1,70 @@
-import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
-import { Day, DayModel } from '../entities/day'
-import { isAuth } from '../../middleware/isAuth'
-import { AddMealInput } from './types/day/inputs/add-meal'
-import { MyContext } from '../../types'
 import { AuthenticationError, UserInputError } from 'apollo-server-express'
 import moment from 'moment'
-import { Meal } from '../entities/meal'
+import {
+	Arg,
+	Ctx,
+	Mutation,
+	Query,
+	Resolver,
+	UseMiddleware,
+} from 'type-graphql'
+import { isAuth } from '../../middleware/isAuth'
+import { MyContext } from '../../types'
+import { Day, DayModel } from '../entities/day'
 import { Food } from '../entities/food'
+import { Meal } from '../entities/meal'
 import { MealName } from '../entities/types/meal/enums'
+import { AddMealInput } from './types/day/inputs/add-meal'
 import { DeleteMealInput } from './types/day/inputs/delete-meal'
 
 @Resolver(Day)
 export class DayResolver {
+	@Query(() => [Meal])
+	@UseMiddleware(isAuth)
+	async meals(
+		@Arg('date') date: string,
+		@Ctx() { payload }: MyContext
+	): Promise<Meal[] | []> {
+		try {
+			const user = payload
+			date = moment(date).format('YYYY-MM-DD')
+			const day = await DayModel.findOne({ date, user })
+			if (!day) return []
+
+			const meals = day.meals
+			return meals
+		} catch (error) {
+			throw new Error(error)
+		}
+	}
+
+	@Query(() => Day)
+	@UseMiddleware(isAuth)
+	async day(
+		@Arg('date') date: string,
+		@Ctx() { payload }: MyContext
+	): Promise<Day> {
+		try {
+			const user = payload
+			date = moment(date).format('YYYY-MM-DD')
+			console.log(user)
+
+			const day = await DayModel.findOne({ date, user })
+			if (!day) {
+				throw new AuthenticationError('Day not found')
+			}
+
+			return day
+		} catch (error) {
+			throw new Error(error)
+		}
+	}
+
 	@Mutation(() => Day)
 	@UseMiddleware(isAuth)
 	async addMeal(
 		@Arg('addMealInput')
-		{
-			name,
-			food: { foodName, foodNutrition, serving },
-			mealNutrition,
-		}: AddMealInput,
+		{ name, food: { foodName, foodNutrition, serving }, date }: AddMealInput,
 		@Ctx() { payload }: MyContext
 	): Promise<Day> {
 		const user = payload
@@ -32,9 +76,21 @@ export class DayResolver {
 		const newFood: Food = { foodName, foodNutrition, serving }
 		const newFoods: Food[] = [newFood]
 
-		const newMeal: Meal = { name, foods: newFoods, mealNutrition }
+		const newMealNutrition = newFoods.map((food) => food.foodNutrition)
 
-		const date = moment().format('YYYY-MM-DD')
+		function totalProtein(arr: any[]) {
+			const reducer = (sum: number, val: number) => sum + val
+			const initVal = 0
+			return arr.reduce(reducer, initVal)
+		}
+
+		const newMeal = {
+			name,
+			foods: newFoods,
+		}
+
+		date = moment(date).format('YYYY-MM-DD')
+		// const formatedDate = moment(date).format('YYYY-MM-DD')
 		const dayExists = await DayModel.findOne({ user, date })
 
 		if (dayExists) {
@@ -45,11 +101,11 @@ export class DayResolver {
 						const breakfast = existingMeals.find(
 							(meal) => meal.name === MealName.BREAKFAST
 						)
+
 						if (!breakfast) {
 							existingMeals.push(newMeal)
 						}
 						breakfast && breakfast.foods.push(newFood)
-						break
 
 					case MealName.LUNCH:
 						const lunch = existingMeals.find(

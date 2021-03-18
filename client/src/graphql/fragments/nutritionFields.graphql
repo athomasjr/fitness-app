@@ -1,0 +1,23 @@
+fragment NutritionFields on Nutrition {
+	calories {
+		...NutrientFields
+	}
+	protein {
+		...NutrientFields
+	}
+	carbs {
+		...NutrientFields
+	}
+	fat {
+		...NutrientFields
+	}
+	sugar {
+		...NutrientFields
+	}
+	fiber {
+		...NutrientFields
+	}
+	sodium {
+		...NutrientFields
+	}
+}

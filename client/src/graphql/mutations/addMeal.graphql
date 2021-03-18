@@ -1,0 +1,5 @@
+mutation AddMeal($addMealInput: AddMealInput!) {
+	addMeal(addMealInput: $addMealInput) {
+		...DayFields
+	}
+}

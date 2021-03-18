@@ -17,8 +17,70 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
+  meals: Array<Meal>;
+  day: Day;
   hello: Scalars['String'];
   user: User;
+};
+
+
+export type QueryMealsArgs = {
+  date: Scalars['String'];
+};
+
+
+export type QueryDayArgs = {
+  date: Scalars['String'];
+};
+
+export type Meal = {
+  __typename?: 'Meal';
+  _id: Scalars['ID'];
+  name: MealName;
+  foods: Array<Maybe<Food>>;
+  mealNutrition?: Maybe<Nutrition>;
+};
+
+export enum MealName {
+  Breakfast = 'BREAKFAST',
+  Lunch = 'LUNCH',
+  Dinner = 'DINNER',
+  Snacks = 'SNACKS'
+}
+
+export type Food = {
+  __typename?: 'Food';
+  _id: Scalars['ID'];
+  foodName: Scalars['String'];
+  serving: Scalars['Int'];
+  foodNutrition: Nutrition;
+};
+
+export type Nutrition = {
+  __typename?: 'Nutrition';
+  calories?: Maybe<Nutrient>;
+  protein?: Maybe<Nutrient>;
+  carbs?: Maybe<Nutrient>;
+  fat?: Maybe<Nutrient>;
+  sugar?: Maybe<Nutrient>;
+  fiber?: Maybe<Nutrient>;
+  sodium?: Maybe<Nutrient>;
+};
+
+export type Nutrient = {
+  __typename?: 'Nutrient';
+  nutrientName: Scalars['String'];
+  unitName: Scalars['String'];
+  value: Scalars['Float'];
+};
+
+export type Day = {
+  __typename?: 'Day';
+  _id: Scalars['ID'];
+  date: Scalars['String'];
+  user: User;
+  dayNutrition?: Maybe<Nutrition>;
+  meals: Array<Maybe<Meal>>;
 };
 
 export type User = {
@@ -93,63 +155,8 @@ export type MutationUpdateProfileArgs = {
   updateProfileInput: UpdateProfileInput;
 };
 
-export type Day = {
-  __typename?: 'Day';
-  _id: Scalars['ID'];
-  date: Scalars['String'];
-  user: User;
-  dayNutrition?: Maybe<Nutrition>;
-  meals: Array<Maybe<Meal>>;
-};
-
-export type Nutrition = {
-  __typename?: 'Nutrition';
-  calories?: Maybe<Nutrient>;
-  protein?: Maybe<Nutrient>;
-  carbs?: Maybe<Nutrient>;
-  fat?: Maybe<Nutrient>;
-  sugar?: Maybe<Nutrient>;
-  fiber?: Maybe<Nutrient>;
-  sodium?: Maybe<Nutrient>;
-  calcium?: Maybe<Nutrient>;
-  iron?: Maybe<Nutrient>;
-  cholesterol?: Maybe<Nutrient>;
-  potassium?: Maybe<Nutrient>;
-  vitaminA?: Maybe<Nutrient>;
-  vitaminC?: Maybe<Nutrient>;
-};
-
-export type Nutrient = {
-  __typename?: 'Nutrient';
-  nutrientName: Scalars['String'];
-  unitName: Scalars['String'];
-  value: Scalars['Float'];
-};
-
-export type Meal = {
-  __typename?: 'Meal';
-  _id: Scalars['ID'];
-  name: MealName;
-  foods: Array<Maybe<Food>>;
-  mealNutrition?: Maybe<Nutrition>;
-};
-
-export enum MealName {
-  Breakfast = 'BREAKFAST',
-  Lunch = 'LUNCH',
-  Dinner = 'DINNER',
-  Snacks = 'SNACKS'
-}
-
-export type Food = {
-  __typename?: 'Food';
-  _id: Scalars['ID'];
-  foodName: Scalars['String'];
-  serving: Scalars['Int'];
-  foodNutrition: Nutrition;
-};
-
 export type AddMealInput = {
+  date: Scalars['String'];
   name: MealName;
   food: AddFoodInput;
   mealNutrition?: Maybe<NutritionInput>;
@@ -169,12 +176,6 @@ export type NutritionInput = {
   sugar?: Maybe<NutrientInput>;
   fiber?: Maybe<NutrientInput>;
   sodium?: Maybe<NutrientInput>;
-  calcium?: Maybe<NutrientInput>;
-  iron?: Maybe<NutrientInput>;
-  cholesterol?: Maybe<NutrientInput>;
-  potassium?: Maybe<NutrientInput>;
-  vitaminA?: Maybe<NutrientInput>;
-  vitaminC?: Maybe<NutrientInput>;
 };
 
 export type NutrientInput = {
@@ -222,6 +223,73 @@ export type UpdateProfileInput = {
   inspiration2?: Maybe<Scalars['String']>;
 };
 
+export type DayFieldsFragment = (
+  { __typename?: 'Day' }
+  & Pick<Day, '_id' | 'date'>
+  & { user: (
+    { __typename?: 'User' }
+    & Pick<User, '_id'>
+  ), dayNutrition?: Maybe<(
+    { __typename?: 'Nutrition' }
+    & NutritionFieldsFragment
+  )>, meals: Array<Maybe<(
+    { __typename?: 'Meal' }
+    & MealFieldsFragment
+  )>> }
+);
+
+export type FoodFieldsFragment = (
+  { __typename?: 'Food' }
+  & Pick<Food, '_id' | 'foodName' | 'serving'>
+  & { foodNutrition: (
+    { __typename?: 'Nutrition' }
+    & NutritionFieldsFragment
+  ) }
+);
+
+export type MealFieldsFragment = (
+  { __typename?: 'Meal' }
+  & Pick<Meal, '_id' | 'name'>
+  & { foods: Array<Maybe<(
+    { __typename?: 'Food' }
+    & FoodFieldsFragment
+  )>>, mealNutrition?: Maybe<(
+    { __typename?: 'Nutrition' }
+    & NutritionFieldsFragment
+  )> }
+);
+
+export type NutrientFieldsFragment = (
+  { __typename?: 'Nutrient' }
+  & Pick<Nutrient, 'nutrientName' | 'unitName' | 'value'>
+);
+
+export type NutritionFieldsFragment = (
+  { __typename?: 'Nutrition' }
+  & { calories?: Maybe<(
+    { __typename?: 'Nutrient' }
+    & NutrientFieldsFragment
+  )>, protein?: Maybe<(
+    { __typename?: 'Nutrient' }
+    & NutrientFieldsFragment
+  )>, carbs?: Maybe<(
+    { __typename?: 'Nutrient' }
+    & NutrientFieldsFragment
+  )>, fat?: Maybe<(
+    { __typename?: 'Nutrient' }
+    & NutrientFieldsFragment
+  )>, sugar?: Maybe<(
+    { __typename?: 'Nutrient' }
+    & NutrientFieldsFragment
+  )>, fiber?: Maybe<(
+    { __typename?: 'Nutrient' }
+    & NutrientFieldsFragment
+  )>, sodium?: Maybe<(
+    { __typename?: 'Nutrient' }
+    & NutrientFieldsFragment
+  )> }
+);
+
 export type UserFieldsFragment = (
   { __typename?: 'User' }
   & Pick<User, '_id' | 'username' | 'email' | 'avatar' | 'height' | 'gender' | 'dateOfBirth' | 'about' | 'inspirations' | 'why' | 'createdAt' | 'updatedAt'>
@@ -237,6 +305,19 @@ export type RegularUserResponseFragment = (
   & { user: (
     { __typename?: 'User' }
     & UserFieldsFragment
+  ) }
+);
+
+export type AddMealMutationVariables = Exact<{
+  addMealInput: AddMealInput;
+}>;
+
+
+export type AddMealMutation = (
+  { __typename?: 'Mutation' }
+  & { addMeal: (
+    { __typename?: 'Day' }
+    & DayFieldsFragment
   ) }
 );
 
@@ -279,6 +360,32 @@ export type UpdateProfileMutation = (
   ) }
 );
 
+export type DayQueryVariables = Exact<{
+  date: Scalars['String'];
+}>;
+
+
+export type DayQuery = (
+  { __typename?: 'Query' }
+  & { day: (
+    { __typename?: 'Day' }
+    & DayFieldsFragment
+  ) }
+);
+
+export type MealsQueryVariables = Exact<{
+  date: Scalars['String'];
+}>;
+
+
+export type MealsQuery = (
+  { __typename?: 'Query' }
+  & { meals: Array<(
+    { __typename?: 'Meal' }
+    & MealFieldsFragment
+  )> }
+);
+
 export type UserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -290,6 +397,77 @@ export type UserQuery = (
   ) }
 );
 
+export const NutrientFieldsFragmentDoc = gql`
+    fragment NutrientFields on Nutrient {
+  nutrientName
+  unitName
+  value
+}
+    `;
+export const NutritionFieldsFragmentDoc = gql`
+    fragment NutritionFields on Nutrition {
+  calories {
+    ...NutrientFields
+  }
+  protein {
+    ...NutrientFields
+  }
+  carbs {
+    ...NutrientFields
+  }
+  fat {
+    ...NutrientFields
+  }
+  sugar {
+    ...NutrientFields
+  }
+  fiber {
+    ...NutrientFields
+  }
+  sodium {
+    ...NutrientFields
+  }
+}
+    ${NutrientFieldsFragmentDoc}`;
+export const FoodFieldsFragmentDoc = gql`
+    fragment FoodFields on Food {
+  _id
+  foodName
+  serving
+  foodNutrition {
+    ...NutritionFields
+  }
+}
+    ${NutritionFieldsFragmentDoc}`;
+export const MealFieldsFragmentDoc = gql`
+    fragment MealFields on Meal {
+  _id
+  name
+  foods {
+    ...FoodFields
+  }
+  mealNutrition {
+    ...NutritionFields
+  }
+}
+    ${FoodFieldsFragmentDoc}
+${NutritionFieldsFragmentDoc}`;
+export const DayFieldsFragmentDoc = gql`
+    fragment DayFields on Day {
+  _id
+  date
+  user {
+    _id
+  }
+  dayNutrition {
+    ...NutritionFields
+  }
+  meals {
+    ...MealFields
+  }
+}
+    ${NutritionFieldsFragmentDoc}
+${MealFieldsFragmentDoc}`;
 export const UserFieldsFragmentDoc = gql`
     fragment UserFields on User {
   _id
@@ -319,6 +497,38 @@ export const RegularUserResponseFragmentDoc = gql`
   token
 }
     ${UserFieldsFragmentDoc}`;
+export const AddMealDocument = gql`
+    mutation AddMeal($addMealInput: AddMealInput!) {
+  addMeal(addMealInput: $addMealInput) {
+    ...DayFields
+  }
+}
+    ${DayFieldsFragmentDoc}`;
+export type AddMealMutationFn = Apollo.MutationFunction<AddMealMutation, AddMealMutationVariables>;
+
+/**
+ * __useAddMealMutation__
+ *
+ * To run a mutation, you first call `useAddMealMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddMealMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addMealMutation, { data, loading, error }] = useAddMealMutation({
+ *   variables: {
+ *      addMealInput: // value for 'addMealInput'
+ *   },
+ * });
+ */
+export function useAddMealMutation(baseOptions?: Apollo.MutationHookOptions<AddMealMutation, AddMealMutationVariables>) {
+        return Apollo.useMutation<AddMealMutation, AddMealMutationVariables>(AddMealDocument, baseOptions);
+      }
+export type AddMealMutationHookResult = ReturnType<typeof useAddMealMutation>;
+export type AddMealMutationResult = Apollo.MutationResult<AddMealMutation>;
+export type AddMealMutationOptions = Apollo.BaseMutationOptions<AddMealMutation, AddMealMutationVariables>;
 export const LoginUserDocument = gql`
     mutation LoginUser($loginUserInput: LoginUserInput!) {
   loginUser(loginUserInput: $loginUserInput) {
@@ -415,6 +625,72 @@ export function useUpdateProfileMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateProfileMutationHookResult = ReturnType<typeof useUpdateProfileMutation>;
 export type UpdateProfileMutationResult = Apollo.MutationResult<UpdateProfileMutation>;
 export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables>;
+export const DayDocument = gql`
+    query Day($date: String!) {
+  day(date: $date) {
+    ...DayFields
+  }
+}
+    ${DayFieldsFragmentDoc}`;
+
+/**
+ * __useDayQuery__
+ *
+ * To run a query within a React component, call `useDayQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDayQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDayQuery({
+ *   variables: {
+ *      date: // value for 'date'
+ *   },
+ * });
+ */
+export function useDayQuery(baseOptions: Apollo.QueryHookOptions<DayQuery, DayQueryVariables>) {
+        return Apollo.useQuery<DayQuery, DayQueryVariables>(DayDocument, baseOptions);
+      }
+export function useDayLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DayQuery, DayQueryVariables>) {
+          return Apollo.useLazyQuery<DayQuery, DayQueryVariables>(DayDocument, baseOptions);
+        }
+export type DayQueryHookResult = ReturnType<typeof useDayQuery>;
+export type DayLazyQueryHookResult = ReturnType<typeof useDayLazyQuery>;
+export type DayQueryResult = Apollo.QueryResult<DayQuery, DayQueryVariables>;
+export const MealsDocument = gql`
+    query Meals($date: String!) {
+  meals(date: $date) {
+    ...MealFields
+  }
+}
+    ${MealFieldsFragmentDoc}`;
+
+/**
+ * __useMealsQuery__
+ *
+ * To run a query within a React component, call `useMealsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMealsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMealsQuery({
+ *   variables: {
+ *      date: // value for 'date'
+ *   },
+ * });
+ */
+export function useMealsQuery(baseOptions: Apollo.QueryHookOptions<MealsQuery, MealsQueryVariables>) {
+        return Apollo.useQuery<MealsQuery, MealsQueryVariables>(MealsDocument, baseOptions);
+      }
+export function useMealsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MealsQuery, MealsQueryVariables>) {
+          return Apollo.useLazyQuery<MealsQuery, MealsQueryVariables>(MealsDocument, baseOptions);
+        }
+export type MealsQueryHookResult = ReturnType<typeof useMealsQuery>;
+export type MealsLazyQueryHookResult = ReturnType<typeof useMealsLazyQuery>;
+export type MealsQueryResult = Apollo.QueryResult<MealsQuery, MealsQueryVariables>;
 export const UserDocument = gql`
     query User {
   user {

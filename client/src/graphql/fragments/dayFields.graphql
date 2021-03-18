@@ -1,0 +1,13 @@
+fragment DayFields on Day {
+	_id
+	date
+	user {
+		_id
+	}
+	dayNutrition {
+		...NutritionFields
+	}
+	meals {
+		...MealFields
+	}
+}

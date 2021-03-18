@@ -19,6 +19,7 @@ import UserProfile from './pages/UserProfile'
 import UpdateProfile from './pages/UpdateProfile'
 import FoodLog from './pages/FoodLog'
 import My404 from './pages/My404'
+import AddFood from './pages/AddFood'
 
 export default function Routes() {
 	return (
@@ -37,6 +38,11 @@ export default function Routes() {
 							component={UpdateProfile}
 						/>
 						<ProtectedRoute exact path='/food/log' component={FoodLog} />
+						<ProtectedRoute
+							exact
+							path='/food/add_food/:mealType'
+							component={AddFood}
+						/>
 						{/* <Route render={() => <Redirect to='/' />} /> */}
 						<Route component={My404} />
 					</Switch>

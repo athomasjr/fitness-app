@@ -1,12 +1,15 @@
-import { IsString } from 'class-validator'
+import { IsNotEmpty, IsString } from 'class-validator'
 import { Field, InputType } from 'type-graphql'
 import { Meal } from '../../../../entities/meal'
 import { MealName } from '../../../../entities/types/meal/enums'
 import { AddFoodInput } from './add-food'
-import { NutritionInput } from './nutrition-input'
 
 @InputType()
 export class AddMealInput implements Partial<Meal> {
+	@Field()
+	@IsNotEmpty({ message: 'Date is required' })
+	date!: string
+
 	@IsString()
 	@Field(() => MealName)
 	name!: MealName
@@ -14,6 +17,6 @@ export class AddMealInput implements Partial<Meal> {
 	@Field(() => AddFoodInput)
 	food!: AddFoodInput
 
-	@Field(() => NutritionInput, { nullable: true })
-	mealNutrition!: NutritionInput
+	// @Field(() => NutritionInput, { nullable: true })
+	// mealNutrition!: NutritionInput
 }

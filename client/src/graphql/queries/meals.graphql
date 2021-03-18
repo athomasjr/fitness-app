@@ -1,0 +1,5 @@
+query Meals($date: String!) {
+	meals(date: $date) {
+		...MealFields
+	}
+}

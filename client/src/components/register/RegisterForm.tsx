@@ -9,6 +9,8 @@ import { useAuthContext } from '../../context/auth/auth'
 import FormError from '../form/FormError'
 import { genderOptions, registerUserValues } from './registerValues'
 import MySelect from '../form/MySelect'
+import MyDatePicker from '../form/MyDatePicker'
+import { subYears } from 'date-fns'
 
 export default function RegisterForm() {
 	const context = useAuthContext()
@@ -48,7 +50,14 @@ export default function RegisterForm() {
 			onSubmit={(data, { setErrors }) => register(data, setErrors)}
 			initialValues={registerUserValues}
 		>
-			{({ values, errors, touched, handleSubmit, handleChange }) => (
+			{({
+				values,
+				errors,
+				touched,
+				handleSubmit,
+				handleChange,
+				setFieldValue,
+			}) => (
 				<div className='form-container'>
 					<Form
 						error
@@ -109,15 +118,15 @@ export default function RegisterForm() {
 
 						<FormError name='gender' />
 
-						<Form.Input
+						<MyDatePicker
+							placeholderText='Select your date of birth'
 							label='Date of birth'
-							placeholder='CDate of birth'
-							name='dateOfBirth'
-							type='date'
 							value={values.dateOfBirth}
+							name='dateOfBirth'
+							maxDate={subYears(new Date(), 18)}
 							error={errors.dateOfBirth ? true : false}
-							onChange={handleChange}
 						/>
+
 						<FormError name='dateOfBirth' />
 						<Button type='submit' primary>
 							Register
