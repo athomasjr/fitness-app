@@ -12,7 +12,6 @@ export default function useFetch(urlParams: string) {
 		setLoading(true)
 		try {
 			const result = await (await axios.get(url)).data
-			console.log(result)
 
 			const food = result.foods.map((food: any) => {
 				return (food = {

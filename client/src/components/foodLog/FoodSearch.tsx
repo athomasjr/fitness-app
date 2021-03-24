@@ -1,20 +1,15 @@
 import React, { useState } from 'react'
 import { Form, Input, Message } from 'semantic-ui-react'
 import useFetch from '../../hooks/useFetch'
-import SearchDisplay from './SearchDisplay'
+import SearchDisplayContainer from './containers/SearchDisplayContainer'
 
 export default function FoodSearch() {
 	const [query, setQuery] = useState('')
 	const [results, setResults] = useState([])
 
 	const { data: foods, loading, error } = useFetch(
-		`&pageSize=10&query=${query}`
+		`&pageSize=10&dataType=Branded,Survey%20(FNDDS)&query=${query}`
 	)
-
-	// console.log(results)
-
-	console.log(foods)
-	console.log(query.length)
 
 	return (
 		<>
@@ -37,7 +32,7 @@ export default function FoodSearch() {
 					)}
 				</Form>
 			</div>
-			{query.length > 0 && <SearchDisplay foods={foods} />}
+			{query.length > 0 && <SearchDisplayContainer foods={foods} />}
 		</>
 	)
 }

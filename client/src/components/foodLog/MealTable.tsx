@@ -1,14 +1,15 @@
-import { Table, Label, Button } from 'semantic-ui-react'
-import { Food, MealName } from '../../types/generated/graphql'
-import { capitalize } from '../../utils/helpers/capitalize'
 import { Link } from 'react-router-dom'
+import { Button, Label, Table } from 'semantic-ui-react'
+import { Meal, MealName } from '../../types/generated/graphql'
+import { capitalize } from '../../utils/helpers/capitalize'
 
 export interface IMealTableProps {
-	meal: Food[]
+	meal: Meal
 	mealType: MealName
+	date: any
 }
 
-export default function MealTable({ meal, mealType }: IMealTableProps) {
+export default function MealTable({ meal, mealType, date }: IMealTableProps) {
 	return (
 		<div style={{ marginTop: '4rem' }}>
 			<Label color='blue' size='big'>
@@ -22,37 +23,27 @@ export default function MealTable({ meal, mealType }: IMealTableProps) {
 						<Table.HeaderCell>Protein</Table.HeaderCell>
 						<Table.HeaderCell>Carbs</Table.HeaderCell>
 						<Table.HeaderCell>Fat</Table.HeaderCell>
-						<Table.HeaderCell>Fiber</Table.HeaderCell>
-						<Table.HeaderCell>Sugar</Table.HeaderCell>
-						<Table.HeaderCell>Sodium</Table.HeaderCell>
 					</Table.Row>
 				</Table.Header>
+
 				<Table.Body>
-					{meal.length > 0 ? (
-						meal.map((food) => {
+					{meal === undefined ? (
+						<Table.Row></Table.Row>
+					) : meal.foods.length > 0 ? (
+						meal.foods.map((food: any) => {
 							const {
 								_id,
 								foodName,
-								foodNutrition: {
-									calories,
-									carbs,
-									fat,
-									protein,
-									sodium,
-									fiber,
-									sugar,
-								},
+								foodNutrition: { calories, protein, carbs, fat },
+								serving,
 							} = food
 							return (
 								<Table.Row key={_id}>
-									<Table.Cell>{foodName}</Table.Cell>
+									<Table.Cell>{capitalize(foodName.toLowerCase())}</Table.Cell>
 									<Table.Cell>{calories?.value}</Table.Cell>
 									<Table.Cell>{protein?.value}</Table.Cell>
 									<Table.Cell>{carbs?.value}</Table.Cell>
 									<Table.Cell>{fat?.value}</Table.Cell>
-									<Table.Cell>{fiber?.value}</Table.Cell>
-									<Table.Cell>{sugar?.value}</Table.Cell>
-									<Table.Cell>{sodium?.value}</Table.Cell>
 								</Table.Row>
 							)
 						})
@@ -60,12 +51,13 @@ export default function MealTable({ meal, mealType }: IMealTableProps) {
 						<Table.Row></Table.Row>
 					)}
 				</Table.Body>
+
 				<Table.Footer fullWidth>
 					<Table.Row>
-						<Table.HeaderCell colSpan='8'>
+						<Table.HeaderCell>
 							<Button
 								as={Link}
-								to={`/food/add_food/${mealType}`}
+								to={`/food/add_food/${mealType}/${date}`}
 								floated='left'
 								icon
 								basic
@@ -75,6 +67,29 @@ export default function MealTable({ meal, mealType }: IMealTableProps) {
 								Add food
 							</Button>
 						</Table.HeaderCell>
+						{meal === undefined ? (
+							<>
+								<Table.HeaderCell>0</Table.HeaderCell>
+								<Table.HeaderCell>0</Table.HeaderCell>
+								<Table.HeaderCell>0</Table.HeaderCell>
+								<Table.HeaderCell>0</Table.HeaderCell>
+							</>
+						) : (
+							<>
+								<Table.HeaderCell>
+									{meal.mealNutrition?.calorieTotal.toFixed(1)}
+								</Table.HeaderCell>
+								<Table.HeaderCell>
+									{meal.mealNutrition?.proteinTotal.toFixed(1)}
+								</Table.HeaderCell>
+								<Table.HeaderCell>
+									{meal.mealNutrition?.carbsTotal.toFixed(1)}
+								</Table.HeaderCell>
+								<Table.HeaderCell>
+									{meal.mealNutrition?.fatTotal.toFixed(1)}
+								</Table.HeaderCell>
+							</>
+						)}
 					</Table.Row>
 				</Table.Footer>
 			</Table>

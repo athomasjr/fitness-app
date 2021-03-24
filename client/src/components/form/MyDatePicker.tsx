@@ -1,11 +1,10 @@
+import { Field, FieldProps } from 'formik'
 import DatePicker from 'react-datepicker'
-import { FieldProps, Field } from 'formik'
-
 import 'react-datepicker/dist/react-datepicker.css'
 
 export default function MyDatePicker({ label, name, error, ...rest }: any) {
 	return (
-		<div className={`field ${error === true ? 'error' : ''}`}>
+		<div className={`field ${error === true ? 'error' : ''} `}>
 			<label htmlFor={name}>{label}</label>
 
 			<Field name={name}>

@@ -1,16 +1,16 @@
-import { Formik, Field } from 'formik'
-import { Form, Button } from 'semantic-ui-react'
+import { subYears } from 'date-fns'
+import { Field, Formik } from 'formik'
 import { useHistory } from 'react-router-dom'
+import { Button, Form } from 'semantic-ui-react'
+import { useAuthContext } from '../../context/auth/auth'
 import {
 	RegisterUserInput,
 	useRegisterUserMutation,
 } from '../../types/generated/graphql'
-import { useAuthContext } from '../../context/auth/auth'
 import FormError from '../form/FormError'
-import { genderOptions, registerUserValues } from './registerValues'
-import MySelect from '../form/MySelect'
 import MyDatePicker from '../form/MyDatePicker'
-import { subYears } from 'date-fns'
+import MySelect from '../form/MySelect'
+import { genderOptions, registerUserValues } from './registerValues'
 
 export default function RegisterForm() {
 	const context = useAuthContext()

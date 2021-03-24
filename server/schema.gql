@@ -22,15 +22,13 @@ scalar DateTime
 
 type Day {
   _id: ID!
+  breakfast: Meal
   date: String!
-  dayNutrition: Nutrition
-  meals: [Meal]!
+  dayNutrition: TotalNutrition
+  dinner: Meal
+  lunch: Meal
+  snacks: Meal
   user: User!
-}
-
-input DeleteMealInput {
-  date: String!
-  name: MealName!
 }
 
 type Food {
@@ -60,7 +58,7 @@ input LoginUserInput {
 type Meal {
   _id: ID!
   foods: [Food]!
-  mealNutrition: MealNutrition
+  mealNutrition: TotalNutrition
   name: MealName!
 }
 
@@ -71,22 +69,10 @@ enum MealName {
   SNACKS
 }
 
-type MealNutrition {
-  calorieTotal: Float
-  carbsTotal: Float
-  fatTotal: Float
-  fiberTotal: Float
-  proteinTotal: Float
-  sodiumTotal: Float
-  sugarTotal: Float
-}
-
 type Mutation {
   addMeal(addMealInput: AddMealInput!): Day!
-  deleteMeal(deleteMealInput: DeleteMealInput!): Day!
   loginUser(loginUserInput: LoginUserInput!): UserResponse!
   registerUser(registerUserInput: RegisterUserInput!): UserResponse!
-  updateMeal: Day!
   updateProfile(updateProfileInput: UpdateProfileInput!): UserResponse!
   updateUserGoals(userGoalInput: UserGoalsInput!): UserResponse!
 }
@@ -107,26 +93,20 @@ type Nutrition {
   calories: Nutrient
   carbs: Nutrient
   fat: Nutrient
-  fiber: Nutrient
   protein: Nutrient
-  sodium: Nutrient
-  sugar: Nutrient
 }
 
 input NutritionInput {
   calories: NutrientInput
   carbs: NutrientInput
   fat: NutrientInput
-  fiber: NutrientInput
   protein: NutrientInput
-  sodium: NutrientInput
-  sugar: NutrientInput
 }
 
 type Query {
   day(date: String!): Day!
   hello: String!
-  meals(date: String!): [Meal!]!
+  meals(date: String!, userId: String!): [Meal!]!
   user: User!
 }
 
@@ -137,6 +117,13 @@ input RegisterUserInput {
   gender: Gender!
   password: String!
   username: String!
+}
+
+type TotalNutrition {
+  calorieTotal: Float!
+  carbsTotal: Float!
+  fatTotal: Float!
+  proteinTotal: Float!
 }
 
 input UpdateProfileInput {

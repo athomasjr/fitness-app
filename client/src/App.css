@@ -3,10 +3,14 @@
 	margin: auto;
 }
 
-.date-picker {
+#date-picker {
 	width: 100% !important;
 }
 
 .react-datepicker-wrapper {
 	width: 100%;
+}
+
+.ui.container {
+	padding-bottom: 7rem;
 }

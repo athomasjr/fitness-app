@@ -1,4 +1,4 @@
-import { Field, InputType, Float } from 'type-graphql'
+import { Field, Float, InputType } from 'type-graphql'
 import { Nutrient } from '../../../../entities/nutrient'
 
 @InputType()

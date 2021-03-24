@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Menu } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
+import { Menu } from 'semantic-ui-react'
 import { useAuthContext } from '../../context/auth/auth'
 export default function Menubar() {
 	const { user, logout } = useAuthContext()
@@ -33,8 +33,7 @@ export default function Menubar() {
 				/>
 				<Menu.Item
 					name='food'
-					active={activeItem === 'food'}
-					// active={}
+					active={path === 'food/log'}
 					as={Link}
 					to='/food/log'
 					// onClick={(e, data) => setActiveItem(data.name as any)}

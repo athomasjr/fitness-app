@@ -16,7 +16,4 @@ export class AddMealInput implements Partial<Meal> {
 
 	@Field(() => AddFoodInput)
 	food!: AddFoodInput
-
-	// @Field(() => NutritionInput, { nullable: true })
-	// mealNutrition!: NutritionInput
 }

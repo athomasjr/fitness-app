@@ -5,6 +5,6 @@ fragment MealFields on Meal {
 		...FoodFields
 	}
 	mealNutrition {
-		...NutritionFields
+		...TotalNutritionFields
 	}
 }

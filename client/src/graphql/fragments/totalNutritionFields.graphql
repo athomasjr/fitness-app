@@ -1,0 +1,6 @@
+fragment TotalNutritionFields on TotalNutrition {
+	calorieTotal
+	proteinTotal
+	carbsTotal
+	fatTotal
+}

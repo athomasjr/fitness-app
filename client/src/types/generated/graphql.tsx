@@ -17,15 +17,10 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
-  meals: Array<Meal>;
   day: Day;
+  meals: Array<Meal>;
   hello: Scalars['String'];
   user: User;
-};
-
-
-export type QueryMealsArgs = {
-  date: Scalars['String'];
 };
 
 
@@ -33,45 +28,10 @@ export type QueryDayArgs = {
   date: Scalars['String'];
 };
 
-export type Meal = {
-  __typename?: 'Meal';
-  _id: Scalars['ID'];
-  name: MealName;
-  foods: Array<Maybe<Food>>;
-  mealNutrition?: Maybe<Nutrition>;
-};
 
-export enum MealName {
-  Breakfast = 'BREAKFAST',
-  Lunch = 'LUNCH',
-  Dinner = 'DINNER',
-  Snacks = 'SNACKS'
-}
-
-export type Food = {
-  __typename?: 'Food';
-  _id: Scalars['ID'];
-  foodName: Scalars['String'];
-  serving: Scalars['Int'];
-  foodNutrition: Nutrition;
-};
-
-export type Nutrition = {
-  __typename?: 'Nutrition';
-  calories?: Maybe<Nutrient>;
-  protein?: Maybe<Nutrient>;
-  carbs?: Maybe<Nutrient>;
-  fat?: Maybe<Nutrient>;
-  sugar?: Maybe<Nutrient>;
-  fiber?: Maybe<Nutrient>;
-  sodium?: Maybe<Nutrient>;
-};
-
-export type Nutrient = {
-  __typename?: 'Nutrient';
-  nutrientName: Scalars['String'];
-  unitName: Scalars['String'];
-  value: Scalars['Float'];
+export type QueryMealsArgs = {
+  userId: Scalars['String'];
+  date: Scalars['String'];
 };
 
 export type Day = {
@@ -79,8 +39,11 @@ export type Day = {
   _id: Scalars['ID'];
   date: Scalars['String'];
   user: User;
-  dayNutrition?: Maybe<Nutrition>;
-  meals: Array<Maybe<Meal>>;
+  dayNutrition?: Maybe<TotalNutrition>;
+  breakfast?: Maybe<Meal>;
+  lunch?: Maybe<Meal>;
+  dinner?: Maybe<Meal>;
+  snacks?: Maybe<Meal>;
 };
 
 export type User = {
@@ -114,11 +77,55 @@ export type Goals = {
 };
 
 
+export type TotalNutrition = {
+  __typename?: 'TotalNutrition';
+  calorieTotal: Scalars['Float'];
+  proteinTotal: Scalars['Float'];
+  carbsTotal: Scalars['Float'];
+  fatTotal: Scalars['Float'];
+};
+
+export type Meal = {
+  __typename?: 'Meal';
+  _id: Scalars['ID'];
+  name: MealName;
+  foods: Array<Maybe<Food>>;
+  mealNutrition?: Maybe<TotalNutrition>;
+};
+
+export enum MealName {
+  Breakfast = 'BREAKFAST',
+  Lunch = 'LUNCH',
+  Dinner = 'DINNER',
+  Snacks = 'SNACKS'
+}
+
+export type Food = {
+  __typename?: 'Food';
+  _id: Scalars['ID'];
+  foodName: Scalars['String'];
+  serving: Scalars['Int'];
+  foodNutrition: Nutrition;
+};
+
+export type Nutrition = {
+  __typename?: 'Nutrition';
+  calories?: Maybe<Nutrient>;
+  protein?: Maybe<Nutrient>;
+  carbs?: Maybe<Nutrient>;
+  fat?: Maybe<Nutrient>;
+};
+
+export type Nutrient = {
+  __typename?: 'Nutrient';
+  nutrientName: Scalars['String'];
+  unitName: Scalars['String'];
+  value: Scalars['Float'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addMeal: Day;
-  updateMeal: Day;
-  deleteMeal: Day;
   registerUser: UserResponse;
   loginUser: UserResponse;
   updateUserGoals: UserResponse;
@@ -128,11 +135,6 @@ export type Mutation = {
 
 export type MutationAddMealArgs = {
   addMealInput: AddMealInput;
-};
-
-
-export type MutationDeleteMealArgs = {
-  deleteMealInput: DeleteMealInput;
 };
 
 
@@ -159,7 +161,6 @@ export type AddMealInput = {
   date: Scalars['String'];
   name: MealName;
   food: AddFoodInput;
-  mealNutrition?: Maybe<NutritionInput>;
 };
 
 export type AddFoodInput = {
@@ -173,20 +174,12 @@ export type NutritionInput = {
   protein?: Maybe<NutrientInput>;
   carbs?: Maybe<NutrientInput>;
   fat?: Maybe<NutrientInput>;
-  sugar?: Maybe<NutrientInput>;
-  fiber?: Maybe<NutrientInput>;
-  sodium?: Maybe<NutrientInput>;
 };
 
 export type NutrientInput = {
   nutrientName: Scalars['String'];
   unitName: Scalars['String'];
   value: Scalars['Float'];
-};
-
-export type DeleteMealInput = {
-  date: Scalars['String'];
-  name: MealName;
 };
 
 export type UserResponse = {
@@ -230,12 +223,21 @@ export type DayFieldsFragment = (
     { __typename?: 'User' }
     & Pick<User, '_id'>
   ), dayNutrition?: Maybe<(
-    { __typename?: 'Nutrition' }
-    & NutritionFieldsFragment
-  )>, meals: Array<Maybe<(
+    { __typename?: 'TotalNutrition' }
+    & TotalNutritionFieldsFragment
+  )>, breakfast?: Maybe<(
     { __typename?: 'Meal' }
     & MealFieldsFragment
-  )>> }
+  )>, lunch?: Maybe<(
+    { __typename?: 'Meal' }
+    & MealFieldsFragment
+  )>, dinner?: Maybe<(
+    { __typename?: 'Meal' }
+    & MealFieldsFragment
+  )>, snacks?: Maybe<(
+    { __typename?: 'Meal' }
+    & MealFieldsFragment
+  )> }
 );
 
 export type FoodFieldsFragment = (
@@ -254,8 +256,8 @@ export type MealFieldsFragment = (
     { __typename?: 'Food' }
     & FoodFieldsFragment
   )>>, mealNutrition?: Maybe<(
-    { __typename?: 'Nutrition' }
-    & NutritionFieldsFragment
+    { __typename?: 'TotalNutrition' }
+    & TotalNutritionFieldsFragment
   )> }
 );
 
@@ -278,16 +280,12 @@ export type NutritionFieldsFragment = (
   )>, fat?: Maybe<(
     { __typename?: 'Nutrient' }
     & NutrientFieldsFragment
-  )>, sugar?: Maybe<(
-    { __typename?: 'Nutrient' }
-    & NutrientFieldsFragment
-  )>, fiber?: Maybe<(
-    { __typename?: 'Nutrient' }
-    & NutrientFieldsFragment
-  )>, sodium?: Maybe<(
-    { __typename?: 'Nutrient' }
-    & NutrientFieldsFragment
   )> }
+);
+
+export type TotalNutritionFieldsFragment = (
+  { __typename?: 'TotalNutrition' }
+  & Pick<TotalNutrition, 'calorieTotal' | 'proteinTotal' | 'carbsTotal' | 'fatTotal'>
 );
 
 export type UserFieldsFragment = (
@@ -375,6 +373,7 @@ export type DayQuery = (
 
 export type MealsQueryVariables = Exact<{
   date: Scalars['String'];
+  userId: Scalars['String'];
 }>;
 
 
@@ -397,6 +396,14 @@ export type UserQuery = (
   ) }
 );
 
+export const TotalNutritionFieldsFragmentDoc = gql`
+    fragment TotalNutritionFields on TotalNutrition {
+  calorieTotal
+  proteinTotal
+  carbsTotal
+  fatTotal
+}
+    `;
 export const NutrientFieldsFragmentDoc = gql`
     fragment NutrientFields on Nutrient {
   nutrientName
@@ -416,15 +423,6 @@ export const NutritionFieldsFragmentDoc = gql`
     ...NutrientFields
   }
   fat {
-    ...NutrientFields
-  }
-  sugar {
-    ...NutrientFields
-  }
-  fiber {
-    ...NutrientFields
-  }
-  sodium {
     ...NutrientFields
   }
 }
@@ -447,11 +445,11 @@ export const MealFieldsFragmentDoc = gql`
     ...FoodFields
   }
   mealNutrition {
-    ...NutritionFields
+    ...TotalNutritionFields
   }
 }
     ${FoodFieldsFragmentDoc}
-${NutritionFieldsFragmentDoc}`;
+${TotalNutritionFieldsFragmentDoc}`;
 export const DayFieldsFragmentDoc = gql`
     fragment DayFields on Day {
   _id
@@ -460,13 +458,22 @@ export const DayFieldsFragmentDoc = gql`
     _id
   }
   dayNutrition {
-    ...NutritionFields
+    ...TotalNutritionFields
   }
-  meals {
+  breakfast {
+    ...MealFields
+  }
+  lunch {
+    ...MealFields
+  }
+  dinner {
+    ...MealFields
+  }
+  snacks {
     ...MealFields
   }
 }
-    ${NutritionFieldsFragmentDoc}
+    ${TotalNutritionFieldsFragmentDoc}
 ${MealFieldsFragmentDoc}`;
 export const UserFieldsFragmentDoc = gql`
     fragment UserFields on User {
@@ -659,8 +666,8 @@ export type DayQueryHookResult = ReturnType<typeof useDayQuery>;
 export type DayLazyQueryHookResult = ReturnType<typeof useDayLazyQuery>;
 export type DayQueryResult = Apollo.QueryResult<DayQuery, DayQueryVariables>;
 export const MealsDocument = gql`
-    query Meals($date: String!) {
-  meals(date: $date) {
+    query Meals($date: String!, $userId: String!) {
+  meals(date: $date, userId: $userId) {
     ...MealFields
   }
 }
@@ -679,6 +686,7 @@ export const MealsDocument = gql`
  * const { data, loading, error } = useMealsQuery({
  *   variables: {
  *      date: // value for 'date'
+ *      userId: // value for 'userId'
  *   },
  * });
  */

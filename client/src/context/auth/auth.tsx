@@ -1,5 +1,5 @@
-import { createContext, useReducer, useContext } from 'react'
 import jwtDecode, { JwtPayload } from 'jwt-decode'
+import { createContext, useContext, useReducer } from 'react'
 import {
 	AUTHACTIONENUM,
 	IAuthContext,
@@ -19,6 +19,7 @@ if (storedUser && typeof storedUser === 'string') {
 
 	if (decodedToken.exp && decodedToken.exp * 1000 < Date.now()) {
 		localStorage.removeItem(LocalStorage.USER)
+		localStorage.removeItem(LocalStorage.DATE)
 	} else {
 		initialState.user = parsedUser
 	}
@@ -55,6 +56,7 @@ function AuthProvider(props: any) {
 			type: AUTHACTIONENUM.LOGOUT,
 		})
 		localStorage.removeItem(LocalStorage.USER)
+		localStorage.removeItem(LocalStorage.DATE)
 	}
 	return (
 		<AuthContext.Provider

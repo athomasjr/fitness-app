@@ -1,8 +1,7 @@
 import { prop as Property } from '@typegoose/typegoose'
-import { Field, ObjectType, ID, Int } from 'type-graphql'
 import { Types } from 'mongoose'
+import { Field, ID, Int, ObjectType } from 'type-graphql'
 import { Nutrition } from './nutrition'
-import { Ref } from '../../types'
 
 @ObjectType()
 export class Food {
@@ -19,5 +18,5 @@ export class Food {
 
 	@Field(() => Nutrition)
 	@Property({ type: () => Nutrition, required: true })
-	foodNutrition!: Ref<Nutrition>
+	foodNutrition!: Nutrition
 }

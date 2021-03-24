@@ -1,31 +1,16 @@
-import { useParams } from 'react-router-dom'
 import { Button, Item, Label, Segment } from 'semantic-ui-react'
-import {
-	Food,
-	MealName,
-	useAddMealMutation,
-} from '../../types/generated/graphql'
+import { Food } from '../../types/generated/graphql'
 import { capitalize } from '../../utils/helpers/capitalize'
 
-interface ISearchDisplayProps {
+export interface ISearchDisplayProps {
 	foods: Food[]
+	handleAddMeal: Function
 }
 
-export default function SearchDisplay({ foods }: ISearchDisplayProps) {
-	const params: MealName = useParams()
-
-	const [addMeal, { loading }] = useAddMealMutation()
-
-	async function handleAddMeal(food: Food) {
-		try {
-			await addMeal({
-				variables: {
-					addMealInput: { food: food, date: '20210313', name: params },
-				},
-			})
-		} catch (error) {}
-	}
-
+export default function SearchDisplay({
+	foods,
+	handleAddMeal,
+}: ISearchDisplayProps) {
 	return (
 		<Segment
 			style={{ marginRight: 'auto', marginLeft: 'auto', marginTop: '5rem' }}
@@ -36,16 +21,7 @@ export default function SearchDisplay({ foods }: ISearchDisplayProps) {
 					const {
 						_id,
 						foodName,
-						foodNutrition: {
-							calories,
-							carbs,
-							fat,
-							protein,
-							fiber,
-							sodium,
-							sugar,
-						},
-						serving,
+						foodNutrition: { calories, carbs, fat, protein },
 					} = food
 					return (
 						<Item key={_id}>
@@ -55,25 +31,25 @@ export default function SearchDisplay({ foods }: ISearchDisplayProps) {
 								</Item.Header>
 								<Item.Extra>
 									<Label.Group color='blue'>
-										{calories && calories.value && (
+										{calories && calories.value >= 0 && (
 											<Label>
 												Calories
 												<Label.Detail>{calories?.value}</Label.Detail>
 											</Label>
 										)}
-										{protein && protein.value && (
+										{protein && protein.value >= 0 && (
 											<Label>
 												Protein
 												<Label.Detail>{protein?.value}</Label.Detail>
 											</Label>
 										)}
-										{carbs && carbs.value && (
+										{carbs && carbs.value >= 0 && (
 											<Label>
 												Carbs
 												<Label.Detail>{carbs?.value}</Label.Detail>
 											</Label>
 										)}
-										{fat && fat.value && (
+										{fat && fat.value >= 0 && (
 											<Label>
 												Fat
 												<Label.Detail>{fat?.value}</Label.Detail>
@@ -82,7 +58,11 @@ export default function SearchDisplay({ foods }: ISearchDisplayProps) {
 									</Label.Group>
 								</Item.Extra>
 								<Item.Extra>
-									<Button basic color='blue' onClick={() => console.log(food)}>
+									<Button
+										basic
+										color='blue'
+										onClick={() => handleAddMeal(food)}
+									>
 										Add
 									</Button>
 								</Item.Extra>

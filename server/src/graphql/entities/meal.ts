@@ -1,40 +1,9 @@
 import { prop as Property } from '@typegoose/typegoose'
 import { Types } from 'mongoose'
-import { Field, Float, ID, ObjectType } from 'type-graphql'
-import { Ref } from '../../types'
+import { Field, ID, ObjectType } from 'type-graphql'
 import { Food } from './food'
+import { TotalNutrition } from './total-nutrition'
 import { MealName } from './types/meal/enums'
-
-@ObjectType()
-export class MealNutrition {
-	@Field(() => Float, { nullable: true })
-	@Property()
-	calorieTotal!: number
-
-	@Field(() => Float, { nullable: true })
-	@Property()
-	proteinTotal!: number
-
-	@Field(() => Float, { nullable: true })
-	@Property()
-	carbsTotal!: number
-
-	@Field(() => Float, { nullable: true })
-	@Property()
-	fatTotal!: number
-
-	@Field(() => Float, { nullable: true })
-	@Property()
-	sugarTotal!: number
-
-	@Field(() => Float, { nullable: true })
-	@Property()
-	fiberTotal!: number
-
-	@Field(() => Float, { nullable: true })
-	@Property()
-	sodiumTotal!: number
-}
 
 @ObjectType()
 export class Meal {
@@ -47,13 +16,9 @@ export class Meal {
 
 	@Field(() => [Food], { nullable: 'items' })
 	@Property({ required: true, type: () => Food, default: [] })
-	foods!: Ref<Food>[]
+	foods!: Food[]
 
-	// @Field(() => [Nutrition], { nullable: true })
-	// @Property({ type: () => Nutrition, required: true, default: [] })
-	// mealNutrition!: Ref<Nutrition>[]
-
-	@Field(() => MealNutrition, { nullable: true })
-	@Property({ type: () => MealNutrition, required: true, default: {} })
-	mealNutrition?: Ref<MealNutrition>
+	@Field(() => TotalNutrition, { nullable: true })
+	@Property({ type: () => TotalNutrition, required: true, default: {} })
+	mealNutrition?: TotalNutrition
 }

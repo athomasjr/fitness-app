@@ -5,9 +5,18 @@ fragment DayFields on Day {
 		_id
 	}
 	dayNutrition {
-		...NutritionFields
+		...TotalNutritionFields
 	}
-	meals {
+	breakfast {
+		...MealFields
+	}
+	lunch {
+		...MealFields
+	}
+	dinner {
+		...MealFields
+	}
+	snacks {
 		...MealFields
 	}
 }

@@ -1,11 +1,11 @@
-import { Field, ID, ObjectType } from 'type-graphql'
-import { prop as Property, getModelForClass } from '@typegoose/typegoose'
-import { Types } from 'mongoose'
-import { Ref } from '../../types'
-import { User } from './user'
+import { getModelForClass, prop as Property } from '@typegoose/typegoose'
 import moment from 'moment'
-import { Nutrition } from './nutrition'
+import { Types } from 'mongoose'
+import { Field, ID, ObjectType } from 'type-graphql'
+import { Ref } from '../../types'
 import { Meal } from './meal'
+import { TotalNutrition } from './total-nutrition'
+import { User } from './user'
 
 @ObjectType()
 export class Day {
@@ -24,13 +24,25 @@ export class Day {
 	@Property({ ref: User, required: true })
 	user!: Ref<User>
 
-	@Field(() => Nutrition, { nullable: true })
-	@Property({ type: () => Nutrition, required: true, default: {} })
-	dayNutrition!: Ref<Nutrition>
+	@Field(() => TotalNutrition, { nullable: true })
+	@Property({ type: () => TotalNutrition, required: true, default: {} })
+	dayNutrition!: TotalNutrition
 
-	@Field(() => [Meal], { nullable: 'items' })
-	@Property({ type: () => Meal, required: true, default: [] })
-	meals!: Meal[]
+	@Field(() => Meal, { nullable: true })
+	@Property({ type: () => Meal, required: true, default: {} })
+	breakfast!: Meal
+
+	@Field(() => Meal, { nullable: true })
+	@Property({ type: () => Meal, required: true, default: {} })
+	lunch!: Meal
+
+	@Field(() => Meal, { nullable: true })
+	@Property({ type: () => Meal, required: true, default: {} })
+	dinner!: Meal
+
+	@Field(() => Meal, { nullable: true })
+	@Property({ type: () => Meal, required: true, default: {} })
+	snacks!: Meal
 }
 
 export const DayModel = getModelForClass(Day)

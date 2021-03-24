@@ -11,13 +11,4 @@ fragment NutritionFields on Nutrition {
 	fat {
 		...NutrientFields
 	}
-	sugar {
-		...NutrientFields
-	}
-	fiber {
-		...NutrientFields
-	}
-	sodium {
-		...NutrientFields
-	}
 }

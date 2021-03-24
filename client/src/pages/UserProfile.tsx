@@ -1,4 +1,5 @@
-import { Grid, Item, Header } from 'semantic-ui-react'
+import { Grid, Header, Item } from 'semantic-ui-react'
+import About, { IAboutProps } from '../components/user-profile/About'
 import ProfileHeader from '../components/user-profile/ProfileHeader'
 import { useAuthContext } from '../context/auth/auth'
 import { capitalize } from '../utils/helpers/capitalize'
@@ -25,6 +26,8 @@ export default function UserProfile() {
 			))
 		)
 
+	const aboutProps: IAboutProps = { why, about, inspirations }
+
 	return (
 		<Grid columns={1}>
 			<Header as='h1'>{capitalize(user!.user.username)}'s profile</Header>
@@ -33,26 +36,7 @@ export default function UserProfile() {
 			</Grid.Row>
 			<Grid.Row centered>
 				<Grid.Column>
-					<Item.Group relaxed>
-						<Item>
-							<Item.Content>
-								<Item.Header>About me</Item.Header>
-								<Item.Description>{about}</Item.Description>
-							</Item.Content>
-						</Item>
-						<Item>
-							<Item.Content>
-								<Item.Header>Why I want to get in shape</Item.Header>
-								<Item.Description>{why}</Item.Description>
-							</Item.Content>
-						</Item>
-						<Item>
-							<Item.Content>
-								<Item.Header>My inspirations</Item.Header>
-								{inspirations}
-							</Item.Content>
-						</Item>
-					</Item.Group>
+					<About {...aboutProps} />
 				</Grid.Column>
 			</Grid.Row>
 		</Grid>

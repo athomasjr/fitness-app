@@ -1,5 +1,5 @@
-query Meals($date: String!) {
-	meals(date: $date) {
+query Meals($date: String!, $userId: String!) {
+	meals(date: $date, userId: $userId) {
 		...MealFields
 	}
 }

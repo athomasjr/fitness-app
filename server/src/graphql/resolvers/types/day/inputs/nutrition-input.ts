@@ -16,14 +16,14 @@ export class NutritionInput implements Partial<Nutrition> {
 	@Field(() => NutrientInput, { nullable: true })
 	fat!: NutrientInput
 
-	@Field(() => NutrientInput, { nullable: true })
-	sugar!: NutrientInput
+	// @Field(() => NutrientInput, { nullable: true })
+	// sugar!: NutrientInput
 
-	@Field(() => NutrientInput, { nullable: true })
-	fiber!: NutrientInput
+	// @Field(() => NutrientInput, { nullable: true })
+	// fiber!: NutrientInput
 
-	@Field(() => NutrientInput, { nullable: true })
-	sodium!: NutrientInput
+	// @Field(() => NutrientInput, { nullable: true })
+	// sodium!: NutrientInput
 
 	// @Field(() => NutrientInput, { nullable: true })
 	// calcium!: NutrientInput
