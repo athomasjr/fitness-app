@@ -14,3 +14,9 @@
 .ui.container {
 	padding-bottom: 7rem;
 }
+
+.userless-container {
+	height: 50vh;
+	display: flex;
+	align-items: center;
+}

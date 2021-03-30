@@ -1,11 +1,10 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Form, Input, Message } from 'semantic-ui-react'
 import useFetch from '../../hooks/useFetch'
 import SearchDisplayContainer from './containers/SearchDisplayContainer'
 
 export default function FoodSearch() {
 	const [query, setQuery] = useState('')
-	const [results, setResults] = useState([])
 
 	const { data: foods, loading, error } = useFetch(
 		`&pageSize=10&dataType=Branded,Survey%20(FNDDS)&query=${query}`

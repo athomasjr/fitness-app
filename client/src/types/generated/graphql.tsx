@@ -19,6 +19,7 @@ export type Query = {
   __typename?: 'Query';
   day: Day;
   meals: Array<Meal>;
+  dayTotals: TotalNutrition;
   hello: Scalars['String'];
   user: User;
 };
@@ -30,6 +31,12 @@ export type QueryDayArgs = {
 
 
 export type QueryMealsArgs = {
+  userId: Scalars['String'];
+  date: Scalars['String'];
+};
+
+
+export type QueryDayTotalsArgs = {
   userId: Scalars['String'];
   date: Scalars['String'];
 };
@@ -126,6 +133,7 @@ export type Nutrient = {
 export type Mutation = {
   __typename?: 'Mutation';
   addMeal: Day;
+  deleteFood: Array<Meal>;
   registerUser: UserResponse;
   loginUser: UserResponse;
   updateUserGoals: UserResponse;
@@ -135,6 +143,11 @@ export type Mutation = {
 
 export type MutationAddMealArgs = {
   addMealInput: AddMealInput;
+};
+
+
+export type MutationDeleteFoodArgs = {
+  deleteFoodInput: DeleteFoodInput;
 };
 
 
@@ -180,6 +193,13 @@ export type NutrientInput = {
   nutrientName: Scalars['String'];
   unitName: Scalars['String'];
   value: Scalars['Float'];
+};
+
+export type DeleteFoodInput = {
+  userId: Scalars['String'];
+  name: MealName;
+  date: Scalars['String'];
+  foodIdx: Scalars['Int'];
 };
 
 export type UserResponse = {
@@ -319,6 +339,19 @@ export type AddMealMutation = (
   ) }
 );
 
+export type DeleteFoodMutationVariables = Exact<{
+  deleteFoodInput: DeleteFoodInput;
+}>;
+
+
+export type DeleteFoodMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteFood: Array<(
+    { __typename?: 'Meal' }
+    & MealFieldsFragment
+  )> }
+);
+
 export type LoginUserMutationVariables = Exact<{
   loginUserInput: LoginUserInput;
 }>;
@@ -368,6 +401,20 @@ export type DayQuery = (
   & { day: (
     { __typename?: 'Day' }
     & DayFieldsFragment
+  ) }
+);
+
+export type DayTotalsQueryVariables = Exact<{
+  date: Scalars['String'];
+  userId: Scalars['String'];
+}>;
+
+
+export type DayTotalsQuery = (
+  { __typename?: 'Query' }
+  & { dayTotals: (
+    { __typename?: 'TotalNutrition' }
+    & TotalNutritionFieldsFragment
   ) }
 );
 
@@ -536,6 +583,38 @@ export function useAddMealMutation(baseOptions?: Apollo.MutationHookOptions<AddM
 export type AddMealMutationHookResult = ReturnType<typeof useAddMealMutation>;
 export type AddMealMutationResult = Apollo.MutationResult<AddMealMutation>;
 export type AddMealMutationOptions = Apollo.BaseMutationOptions<AddMealMutation, AddMealMutationVariables>;
+export const DeleteFoodDocument = gql`
+    mutation DeleteFood($deleteFoodInput: DeleteFoodInput!) {
+  deleteFood(deleteFoodInput: $deleteFoodInput) {
+    ...MealFields
+  }
+}
+    ${MealFieldsFragmentDoc}`;
+export type DeleteFoodMutationFn = Apollo.MutationFunction<DeleteFoodMutation, DeleteFoodMutationVariables>;
+
+/**
+ * __useDeleteFoodMutation__
+ *
+ * To run a mutation, you first call `useDeleteFoodMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteFoodMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteFoodMutation, { data, loading, error }] = useDeleteFoodMutation({
+ *   variables: {
+ *      deleteFoodInput: // value for 'deleteFoodInput'
+ *   },
+ * });
+ */
+export function useDeleteFoodMutation(baseOptions?: Apollo.MutationHookOptions<DeleteFoodMutation, DeleteFoodMutationVariables>) {
+        return Apollo.useMutation<DeleteFoodMutation, DeleteFoodMutationVariables>(DeleteFoodDocument, baseOptions);
+      }
+export type DeleteFoodMutationHookResult = ReturnType<typeof useDeleteFoodMutation>;
+export type DeleteFoodMutationResult = Apollo.MutationResult<DeleteFoodMutation>;
+export type DeleteFoodMutationOptions = Apollo.BaseMutationOptions<DeleteFoodMutation, DeleteFoodMutationVariables>;
 export const LoginUserDocument = gql`
     mutation LoginUser($loginUserInput: LoginUserInput!) {
   loginUser(loginUserInput: $loginUserInput) {
@@ -665,6 +744,40 @@ export function useDayLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DayQue
 export type DayQueryHookResult = ReturnType<typeof useDayQuery>;
 export type DayLazyQueryHookResult = ReturnType<typeof useDayLazyQuery>;
 export type DayQueryResult = Apollo.QueryResult<DayQuery, DayQueryVariables>;
+export const DayTotalsDocument = gql`
+    query DayTotals($date: String!, $userId: String!) {
+  dayTotals(date: $date, userId: $userId) {
+    ...TotalNutritionFields
+  }
+}
+    ${TotalNutritionFieldsFragmentDoc}`;
+
+/**
+ * __useDayTotalsQuery__
+ *
+ * To run a query within a React component, call `useDayTotalsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDayTotalsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDayTotalsQuery({
+ *   variables: {
+ *      date: // value for 'date'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useDayTotalsQuery(baseOptions: Apollo.QueryHookOptions<DayTotalsQuery, DayTotalsQueryVariables>) {
+        return Apollo.useQuery<DayTotalsQuery, DayTotalsQueryVariables>(DayTotalsDocument, baseOptions);
+      }
+export function useDayTotalsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DayTotalsQuery, DayTotalsQueryVariables>) {
+          return Apollo.useLazyQuery<DayTotalsQuery, DayTotalsQueryVariables>(DayTotalsDocument, baseOptions);
+        }
+export type DayTotalsQueryHookResult = ReturnType<typeof useDayTotalsQuery>;
+export type DayTotalsLazyQueryHookResult = ReturnType<typeof useDayTotalsLazyQuery>;
+export type DayTotalsQueryResult = Apollo.QueryResult<DayTotalsQuery, DayTotalsQueryVariables>;
 export const MealsDocument = gql`
     query Meals($date: String!, $userId: String!) {
   meals(date: $date, userId: $userId) {

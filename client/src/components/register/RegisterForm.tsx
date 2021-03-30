@@ -67,6 +67,8 @@ export default function RegisterForm() {
 					>
 						<h1>Register</h1>
 						<Form.Input
+							icon='user'
+							iconPosition='left'
 							label='Username'
 							placeholder='Username'
 							name='username'
@@ -77,6 +79,8 @@ export default function RegisterForm() {
 						/>
 						<FormError name='username' />
 						<Form.Input
+							icon='mail'
+							iconPosition='left'
 							label='Email'
 							placeholder='Email'
 							name='email'
@@ -87,6 +91,8 @@ export default function RegisterForm() {
 						/>
 						<FormError name='email' />
 						<Form.Input
+							icon='lock'
+							iconPosition='left'
 							label='Password'
 							placeholder='Password'
 							name='password'
@@ -97,6 +103,8 @@ export default function RegisterForm() {
 						/>
 						<FormError name='password' />
 						<Form.Input
+							icon='lock'
+							iconPosition='left'
 							label='Confirm Password'
 							placeholder='Confirm Password'
 							name='confirmPassword'

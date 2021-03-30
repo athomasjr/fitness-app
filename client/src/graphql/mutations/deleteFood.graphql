@@ -1,0 +1,5 @@
+mutation DeleteFood($deleteFoodInput: DeleteFoodInput!) {
+	deleteFood(deleteFoodInput: $deleteFoodInput) {
+		...MealFields
+	}
+}

@@ -3,22 +3,20 @@ import moment from 'moment'
 import { forwardRef, useEffect, useState } from 'react'
 import DatePicker from 'react-datepicker'
 import { Button, Icon, Label, Loader } from 'semantic-ui-react'
+import DayTotals from '../components/foodLog/dayTotals/DayTotals'
 import MealTable from '../components/foodLog/MealTable'
 import { useAuthContext } from '../context/auth/auth'
-import { LocalStorage } from '../types/authContext'
-import { MealName, useMealsQuery } from '../types/generated/graphql'
+import { SessionStorage } from '../types/authContext'
+import {
+	MealName,
+	useDayTotalsQuery,
+	useMealsQuery,
+} from '../types/generated/graphql'
 
 export default function FoodLog() {
-	useEffect(() => {
-		localStorage.setItem(
-			LocalStorage.DATE,
-			JSON.stringify(moment().format('YYYY-MM-DD'))
-		)
-	}, [])
-
-	const storedDate = localStorage.getItem(LocalStorage.DATE)
-
-	const start = storedDate ? moment(storedDate).toDate() : new Date()
+	const start = sessionStorage.getItem(SessionStorage.DATE)
+		? moment(sessionStorage.getItem(SessionStorage.DATE)).toDate()
+		: new Date()
 
 	const [startDate, setStartDate] = useState<Date>(start)
 
@@ -33,8 +31,8 @@ export default function FoodLog() {
 	}
 
 	useEffect(() => {
-		localStorage.setItem(
-			LocalStorage.DATE,
+		sessionStorage.setItem(
+			SessionStorage.DATE,
 			moment(startDate).format('YYYY-MM-DD')
 		)
 	}, [startDate])
@@ -68,6 +66,15 @@ export default function FoodLog() {
 			date,
 		},
 	})
+
+	const { data: dayTotals } = useDayTotalsQuery({
+		variables: {
+			userId: user?.user._id!,
+			date,
+		},
+	})
+
+	const dayNutrition = dayTotals === undefined ? undefined : dayTotals.dayTotals
 
 	const breakfast =
 		data === undefined
@@ -125,6 +132,8 @@ export default function FoodLog() {
 			<MealTable meal={lunch as any} mealType={MealName.Lunch} date={date} />
 			<MealTable meal={dinner as any} mealType={MealName.Dinner} date={date} />
 			<MealTable meal={snacks as any} mealType={MealName.Snacks} date={date} />
+
+			<DayTotals dayNutrition={dayNutrition as any} />
 		</>
 	)
 }

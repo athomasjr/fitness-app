@@ -13,8 +13,10 @@ import { MyContext } from '../../types'
 import { Day, DayModel } from '../entities/day'
 import { Food } from '../entities/food'
 import { Meal } from '../entities/meal'
+import { TotalNutrition } from '../entities/total-nutrition'
 import { MealName } from '../entities/types/meal/enums'
 import { AddMealInput } from './types/day/inputs/add-meal'
+import { DeleteFoodInput } from './types/day/inputs/delete-food'
 
 @Resolver(Day)
 export class DayResolver {
@@ -62,6 +64,26 @@ export class DayResolver {
 			const snacks = day.snacks
 
 			return [breakfast, lunch, dinner, snacks]
+		} catch (error) {
+			throw new Error(error)
+		}
+	}
+
+	@Query(() => TotalNutrition)
+	@UseMiddleware(isAuth)
+	async dayTotals(
+		@Arg('date') date: string,
+		@Arg('userId') userId: string
+	): Promise<TotalNutrition> {
+		date = moment(date).format('YYYY-MM-DD')
+
+		try {
+			const day = await DayModel.findOne({ date, user: userId })
+			if (!day) {
+				throw new AuthenticationError('Day not found')
+			}
+
+			return day.dayNutrition
 		} catch (error) {
 			throw new Error(error)
 		}
@@ -245,5 +267,172 @@ export class DayResolver {
 
 		await newDay.save()
 		return newDay
+	}
+
+	@Mutation(() => [Meal])
+	@UseMiddleware(isAuth)
+	async deleteFood(
+		@Arg('deleteFoodInput') { date, foodIdx, name, userId }: DeleteFoodInput
+	): Promise<Meal[]> {
+		date = moment(date).format('YYYY-MM-DD')
+
+		try {
+			const day = await DayModel.findOne({ date, user: userId })
+
+			if (!day) {
+				throw new AuthenticationError('Day not found')
+			}
+
+			const breakfast = day.breakfast
+			const lunch = day.lunch
+			const dinner = day.dinner
+			const snacks = day.snacks
+
+			if (name === MealName.BREAKFAST) {
+				const deletedBreakfastFoodNutrition =
+					breakfast.foods[foodIdx].foodNutrition
+
+				breakfast.mealNutrition!.calorieTotal =
+					breakfast.mealNutrition!.calorieTotal! -
+					deletedBreakfastFoodNutrition.calories.value
+
+				breakfast.mealNutrition!.proteinTotal =
+					breakfast.mealNutrition!.proteinTotal! -
+					deletedBreakfastFoodNutrition.protein.value
+
+				breakfast.mealNutrition!.carbsTotal =
+					breakfast.mealNutrition!.carbsTotal! -
+					deletedBreakfastFoodNutrition.carbs.value
+
+				breakfast.mealNutrition!.fatTotal =
+					breakfast.mealNutrition!.fatTotal! -
+					deletedBreakfastFoodNutrition.fat.value
+
+				day.dayNutrition.calorieTotal =
+					day.dayNutrition.calorieTotal! -
+					deletedBreakfastFoodNutrition.calories.value
+
+				day.dayNutrition.proteinTotal =
+					day.dayNutrition.proteinTotal! -
+					deletedBreakfastFoodNutrition.protein.value
+
+				day.dayNutrition.carbsTotal =
+					day.dayNutrition.carbsTotal! -
+					deletedBreakfastFoodNutrition.carbs.value
+
+				day.dayNutrition.fatTotal =
+					day.dayNutrition.fatTotal! - deletedBreakfastFoodNutrition.fat.value
+
+				breakfast.foods.splice(foodIdx, 1)
+			}
+			if (name === MealName.LUNCH) {
+				const deletedLunchFoodNutrition = lunch.foods[foodIdx].foodNutrition
+
+				lunch.mealNutrition!.calorieTotal =
+					lunch.mealNutrition!.calorieTotal! -
+					deletedLunchFoodNutrition.calories.value
+
+				lunch.mealNutrition!.proteinTotal =
+					lunch.mealNutrition!.proteinTotal! -
+					deletedLunchFoodNutrition.protein.value
+
+				lunch.mealNutrition!.carbsTotal =
+					lunch.mealNutrition!.carbsTotal! -
+					deletedLunchFoodNutrition.carbs.value
+
+				lunch.mealNutrition!.fatTotal =
+					lunch.mealNutrition!.fatTotal! - deletedLunchFoodNutrition.fat.value
+
+				day.dayNutrition.calorieTotal =
+					day.dayNutrition.calorieTotal! -
+					deletedLunchFoodNutrition.calories.value
+
+				day.dayNutrition.proteinTotal =
+					day.dayNutrition.proteinTotal! -
+					deletedLunchFoodNutrition.protein.value
+
+				day.dayNutrition.carbsTotal =
+					day.dayNutrition.carbsTotal! - deletedLunchFoodNutrition.carbs.value
+
+				day.dayNutrition.fatTotal =
+					day.dayNutrition.fatTotal! - deletedLunchFoodNutrition.fat.value
+
+				lunch.foods.splice(foodIdx, 1)
+			}
+			if (name === MealName.DINNER) {
+				const deletedDinnerFoodNutrition = dinner.foods[foodIdx].foodNutrition
+
+				dinner.mealNutrition!.calorieTotal =
+					dinner.mealNutrition!.calorieTotal! -
+					deletedDinnerFoodNutrition.calories.value
+
+				dinner.mealNutrition!.proteinTotal =
+					dinner.mealNutrition!.proteinTotal! -
+					deletedDinnerFoodNutrition.protein.value
+
+				dinner.mealNutrition!.carbsTotal =
+					dinner.mealNutrition!.carbsTotal! -
+					deletedDinnerFoodNutrition.carbs.value
+
+				dinner.mealNutrition!.fatTotal =
+					dinner.mealNutrition!.fatTotal! - deletedDinnerFoodNutrition.fat.value
+
+				day.dayNutrition.calorieTotal =
+					day.dayNutrition.calorieTotal! -
+					deletedDinnerFoodNutrition.calories.value
+
+				day.dayNutrition.proteinTotal =
+					day.dayNutrition.proteinTotal! -
+					deletedDinnerFoodNutrition.protein.value
+
+				day.dayNutrition.carbsTotal =
+					day.dayNutrition.carbsTotal! - deletedDinnerFoodNutrition.carbs.value
+
+				day.dayNutrition.fatTotal =
+					day.dayNutrition.fatTotal! - deletedDinnerFoodNutrition.fat.value
+
+				dinner.foods.splice(foodIdx, 1)
+			}
+			if (name === MealName.SNACKS) {
+				const deletedSnacksFoodNutrition = snacks.foods[foodIdx].foodNutrition
+
+				snacks.mealNutrition!.calorieTotal =
+					snacks.mealNutrition!.calorieTotal! -
+					deletedSnacksFoodNutrition.calories.value
+
+				snacks.mealNutrition!.proteinTotal =
+					snacks.mealNutrition!.proteinTotal! -
+					deletedSnacksFoodNutrition.protein.value
+
+				snacks.mealNutrition!.carbsTotal =
+					snacks.mealNutrition!.carbsTotal! -
+					deletedSnacksFoodNutrition.carbs.value
+
+				snacks.mealNutrition!.fatTotal =
+					snacks.mealNutrition!.fatTotal! - deletedSnacksFoodNutrition.fat.value
+
+				day.dayNutrition.calorieTotal =
+					day.dayNutrition.calorieTotal! -
+					deletedSnacksFoodNutrition.calories.value
+
+				day.dayNutrition.proteinTotal =
+					day.dayNutrition.proteinTotal! -
+					deletedSnacksFoodNutrition.protein.value
+
+				day.dayNutrition.carbsTotal =
+					day.dayNutrition.carbsTotal! - deletedSnacksFoodNutrition.carbs.value
+
+				day.dayNutrition.fatTotal =
+					day.dayNutrition.fatTotal! - deletedSnacksFoodNutrition.fat.value
+
+				snacks.foods.splice(foodIdx, 1)
+			}
+
+			await day.save()
+
+			return [breakfast, lunch, dinner, snacks]
+		} catch (error) {
+			throw new Error(error)
+		}
 	}
 }

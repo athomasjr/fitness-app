@@ -5,6 +5,7 @@ import {
 	IAuthContext,
 	IAuthState,
 	LocalStorage,
+	SessionStorage,
 } from '../../types/authContext'
 import { UserResponse } from '../../types/generated/graphql'
 import { authReducer } from './authReducer'
@@ -19,7 +20,7 @@ if (storedUser && typeof storedUser === 'string') {
 
 	if (decodedToken.exp && decodedToken.exp * 1000 < Date.now()) {
 		localStorage.removeItem(LocalStorage.USER)
-		localStorage.removeItem(LocalStorage.DATE)
+		sessionStorage.removeItem(SessionStorage.DATE)
 	} else {
 		initialState.user = parsedUser
 	}
@@ -56,7 +57,7 @@ function AuthProvider(props: any) {
 			type: AUTHACTIONENUM.LOGOUT,
 		})
 		localStorage.removeItem(LocalStorage.USER)
-		localStorage.removeItem(LocalStorage.DATE)
+		sessionStorage.removeItem(SessionStorage.DATE)
 	}
 	return (
 		<AuthContext.Provider

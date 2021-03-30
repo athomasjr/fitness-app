@@ -1,6 +1,11 @@
 import { Link } from 'react-router-dom'
-import { Button, Label, Table } from 'semantic-ui-react'
-import { Meal, MealName } from '../../types/generated/graphql'
+import { Button, Icon, Label, Table } from 'semantic-ui-react'
+import { useAuthContext } from '../../context/auth/auth'
+import {
+	Meal,
+	MealName,
+	useDeleteFoodMutation,
+} from '../../types/generated/graphql'
 import { capitalize } from '../../utils/helpers/capitalize'
 
 export interface IMealTableProps {
@@ -10,14 +15,36 @@ export interface IMealTableProps {
 }
 
 export default function MealTable({ meal, mealType, date }: IMealTableProps) {
+	const { user } = useAuthContext()
+
+	const [deleteFood] = useDeleteFoodMutation()
+
+	async function handleDeleteFood(idx: number) {
+		try {
+			await deleteFood({
+				variables: {
+					deleteFoodInput: {
+						date,
+						userId: user?.user._id!,
+						name: mealType,
+						foodIdx: idx,
+					},
+				},
+			})
+		} catch (error) {
+			console.error(error)
+		}
+	}
+
 	return (
 		<div style={{ marginTop: '4rem' }}>
 			<Label color='blue' size='big'>
 				{capitalize(mealType.toLowerCase())}
 			</Label>
-			<Table compact celled>
+			<Table compact celled definition>
 				<Table.Header>
 					<Table.Row>
+						<Table.HeaderCell />
 						<Table.HeaderCell>Food</Table.HeaderCell>
 						<Table.HeaderCell>Calories</Table.HeaderCell>
 						<Table.HeaderCell>Protein</Table.HeaderCell>
@@ -30,15 +57,22 @@ export default function MealTable({ meal, mealType, date }: IMealTableProps) {
 					{meal === undefined ? (
 						<Table.Row></Table.Row>
 					) : meal.foods.length > 0 ? (
-						meal.foods.map((food: any) => {
+						meal.foods.map((food: any, idx: number) => {
 							const {
 								_id,
 								foodName,
 								foodNutrition: { calories, protein, carbs, fat },
-								serving,
 							} = food
 							return (
 								<Table.Row key={_id}>
+									<Table.Cell collapsing>
+										<Icon
+											color='red'
+											name='delete'
+											style={{ cursor: 'pointer' }}
+											onClick={() => handleDeleteFood(idx)}
+										/>
+									</Table.Cell>
 									<Table.Cell>{capitalize(foodName.toLowerCase())}</Table.Cell>
 									<Table.Cell>{calories?.value}</Table.Cell>
 									<Table.Cell>{protein?.value}</Table.Cell>
@@ -54,6 +88,7 @@ export default function MealTable({ meal, mealType, date }: IMealTableProps) {
 
 				<Table.Footer fullWidth>
 					<Table.Row>
+						<Table.HeaderCell />
 						<Table.HeaderCell>
 							<Button
 								as={Link}

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Menu } from 'semantic-ui-react'
 import { useAuthContext } from '../../context/auth/auth'
+import { SessionStorage } from '../../types/authContext'
 export default function Menubar() {
 	const { user, logout } = useAuthContext()
 	const pathname = window.location.pathname
@@ -11,6 +12,12 @@ export default function Menubar() {
 
 	function handleLinkClick(e: React.MouseEvent, { name }: any) {
 		setActiveItem(name)
+		sessionStorage.removeItem(SessionStorage.DATE)
+	}
+
+	function handleLogout() {
+		logout()
+		setActiveItem('home')
 	}
 
 	const menuBar: JSX.Element = user ? (
@@ -21,7 +28,13 @@ export default function Menubar() {
 			color='blue'
 			style={{ marginBottom: '5rem' }}
 		>
-			<Menu.Item name={user.user.username} active as={Link} to='/' />
+			<Menu.Item
+				name={user.user.username}
+				active
+				as={Link}
+				to='/'
+				onClick={() => sessionStorage.removeItem(SessionStorage.DATE)}
+			/>
 
 			<Menu.Menu position='right'>
 				<Menu.Item
@@ -39,7 +52,7 @@ export default function Menubar() {
 					// onClick={(e, data) => setActiveItem(data.name as any)}
 					onClick={handleLinkClick}
 				/>
-				<Menu.Item name='logout' onClick={logout} />
+				<Menu.Item name='logout' onClick={handleLogout} />
 			</Menu.Menu>
 		</Menu>
 	) : (

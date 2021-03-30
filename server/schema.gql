@@ -31,6 +31,13 @@ type Day {
   user: User!
 }
 
+input DeleteFoodInput {
+  date: String!
+  foodIdx: Int!
+  name: MealName!
+  userId: String!
+}
+
 type Food {
   _id: ID!
   foodName: String!
@@ -71,6 +78,7 @@ enum MealName {
 
 type Mutation {
   addMeal(addMealInput: AddMealInput!): Day!
+  deleteFood(deleteFoodInput: DeleteFoodInput!): [Meal!]!
   loginUser(loginUserInput: LoginUserInput!): UserResponse!
   registerUser(registerUserInput: RegisterUserInput!): UserResponse!
   updateProfile(updateProfileInput: UpdateProfileInput!): UserResponse!
@@ -105,6 +113,7 @@ input NutritionInput {
 
 type Query {
   day(date: String!): Day!
+  dayTotals(date: String!, userId: String!): TotalNutrition!
   hello: String!
   meals(date: String!, userId: String!): [Meal!]!
   user: User!

@@ -1,0 +1,5 @@
+query DayTotals($date: String!, $userId: String!) {
+	dayTotals(date: $date, userId: $userId) {
+		...TotalNutritionFields
+	}
+}

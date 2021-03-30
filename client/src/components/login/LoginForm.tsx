@@ -1,14 +1,18 @@
-import { useHistory } from 'react-router-dom'
 import { Formik } from 'formik'
-import { Form, Button } from 'semantic-ui-react'
+import { useHistory } from 'react-router-dom'
+import { Button, Form } from 'semantic-ui-react'
+import { useAuthContext } from '../../context/auth/auth'
 import {
 	LoginUserInput,
 	useLoginUserMutation,
 } from '../../types/generated/graphql'
-import { useAuthContext } from '../../context/auth/auth'
 import FormError from '../form/FormError'
 
-export default function LoginForm() {
+export interface ILoginFormProps {
+	heading?: string
+}
+
+export default function LoginForm({ heading }: ILoginFormProps) {
 	const context = useAuthContext()
 	const [loginUser, { loading }] = useLoginUserMutation()
 	const history = useHistory()
@@ -56,8 +60,11 @@ export default function LoginForm() {
 						className={loading ? 'loading' : ''}
 						onSubmit={handleSubmit}
 					>
-						<h1>Login</h1>
+						{heading ? <h1>{heading}</h1> : null}
+
 						<Form.Input
+							icon='user'
+							iconPosition='left'
 							label='Username'
 							placeholder='Username'
 							name='username'
@@ -69,6 +76,8 @@ export default function LoginForm() {
 						<FormError name='username' />
 
 						<Form.Input
+							icon='lock'
+							iconPosition='left'
 							label='Password'
 							placeholder='Password'
 							name='password'

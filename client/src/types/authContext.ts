@@ -3,6 +3,9 @@ import { UserResponse } from './generated/graphql'
 export enum LocalStorage {
 	JWT_TOKEN = 'jwtToken',
 	USER = 'user',
+}
+
+export enum SessionStorage {
 	DATE = 'date',
 }
 
