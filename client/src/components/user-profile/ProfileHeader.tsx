@@ -1,9 +1,9 @@
-import { Segment, Grid, Button, Card, Image } from 'semantic-ui-react'
-import { User } from '../../types/generated/graphql'
-import Moment from 'react-moment'
-import { capitalize } from '../../utils/helpers/capitalize'
-import { Link } from 'react-router-dom'
 import moment from 'moment'
+import Moment from 'react-moment'
+import { Link } from 'react-router-dom'
+import { Button, Card, Grid, Image, Segment } from 'semantic-ui-react'
+import { User } from '../../types/generated/graphql'
+import { capitalize } from '../../utils/helpers/capitalize'
 
 interface IProfileHeaderProps {
 	user: User
@@ -58,8 +58,13 @@ export default function ProfileHeader({ user }: IProfileHeaderProps) {
 									<Button basic color='blue' as={Link} to='/profile/edit'>
 										Edit Profile
 									</Button>
-									<Button basic color='blue'>
-										Add Photo
+									<Button
+										basic
+										color='blue'
+										as={Link}
+										to='/profile/edit/avatar'
+									>
+										{!user.avatar ? 'Add Photo' : 'Update Photo'}
 									</Button>
 								</div>
 							</Card>

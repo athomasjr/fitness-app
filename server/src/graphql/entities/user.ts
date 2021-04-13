@@ -1,9 +1,8 @@
-import { prop as Property, getModelForClass } from '@typegoose/typegoose'
-import { ObjectType, Field, ID, Float } from 'type-graphql'
+import { getModelForClass, prop as Property } from '@typegoose/typegoose'
 import { Types } from 'mongoose'
-import { Gender } from './types/user/enums'
+import { Field, Float, ID, ObjectType } from 'type-graphql'
 import { Goals } from './goals'
-import { Ref } from '../../types'
+import { Gender } from './types/user/enums'
 
 @ObjectType()
 export class User {
@@ -61,7 +60,7 @@ export class User {
 
 	@Field(() => Goals, { nullable: true })
 	@Property({ required: true, _id: false, type: () => Goals, default: {} })
-	goals?: Ref<Goals>
+	goals?: Goals
 
 	@Field()
 	createdAt!: Date

@@ -1,0 +1,5 @@
+mutation EnterWeight($currentWeight: Float!) {
+	enterWeight(currentWeight: $currentWeight) {
+		...RegularUserResponse
+	}
+}

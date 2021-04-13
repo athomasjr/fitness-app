@@ -15,7 +15,7 @@ export interface IAuthState {
 
 export interface IAuthContext extends IAuthState {
 	login: (userData: UserResponse) => void
-	update: (userData: UserResponse) => void
+	updateUser: (userData: UserResponse) => void
 	logout: () => void
 }
 

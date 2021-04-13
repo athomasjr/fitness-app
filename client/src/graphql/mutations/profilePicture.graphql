@@ -1,0 +1,5 @@
+mutation ProfilePicture($file: Upload!) {
+	profilePicture(file: $file) {
+		...RegularUserResponse
+	}
+}

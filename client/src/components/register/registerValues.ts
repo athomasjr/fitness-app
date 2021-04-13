@@ -1,10 +1,10 @@
 import { Gender, RegisterUserInput } from '../../types/generated/graphql'
 
 export const registerUserValues: RegisterUserInput = {
-	username: 'antonio',
-	email: 'antonio@mail.com',
-	password: '123456',
-	confirmPassword: '123456',
+	username: '',
+	email: '',
+	password: '',
+	confirmPassword: '',
 	gender: Gender.Other,
 	dateOfBirth: '',
 }

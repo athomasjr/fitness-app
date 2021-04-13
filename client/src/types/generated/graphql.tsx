@@ -13,6 +13,8 @@ export type Scalars = {
   Float: number;
   /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
   DateTime: any;
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: any;
 };
 
 export type Query = {
@@ -20,7 +22,6 @@ export type Query = {
   day: Day;
   meals: Array<Meal>;
   dayTotals: TotalNutrition;
-  hello: Scalars['String'];
   user: User;
 };
 
@@ -136,8 +137,9 @@ export type Mutation = {
   deleteFood: Array<Meal>;
   registerUser: UserResponse;
   loginUser: UserResponse;
-  updateUserGoals: UserResponse;
   updateProfile: UserResponse;
+  enterWeight: UserResponse;
+  profilePicture: UserResponse;
 };
 
 
@@ -161,13 +163,18 @@ export type MutationLoginUserArgs = {
 };
 
 
-export type MutationUpdateUserGoalsArgs = {
-  userGoalInput: UserGoalsInput;
+export type MutationUpdateProfileArgs = {
+  updateProfileInput: UpdateProfileInput;
 };
 
 
-export type MutationUpdateProfileArgs = {
-  updateProfileInput: UpdateProfileInput;
+export type MutationEnterWeightArgs = {
+  currentWeight: Scalars['Float'];
+};
+
+
+export type MutationProfilePictureArgs = {
+  file: Scalars['Upload'];
 };
 
 export type AddMealInput = {
@@ -222,12 +229,6 @@ export type LoginUserInput = {
   password: Scalars['String'];
 };
 
-export type UserGoalsInput = {
-  startingWeight?: Maybe<Scalars['Float']>;
-  currentWeight?: Maybe<Scalars['Float']>;
-  goalWeight?: Maybe<Scalars['Float']>;
-};
-
 export type UpdateProfileInput = {
   about?: Maybe<Scalars['String']>;
   why?: Maybe<Scalars['String']>;
@@ -235,6 +236,7 @@ export type UpdateProfileInput = {
   inspiration1?: Maybe<Scalars['String']>;
   inspiration2?: Maybe<Scalars['String']>;
 };
+
 
 export type DayFieldsFragment = (
   { __typename?: 'Day' }
@@ -352,6 +354,19 @@ export type DeleteFoodMutation = (
   )> }
 );
 
+export type EnterWeightMutationVariables = Exact<{
+  currentWeight: Scalars['Float'];
+}>;
+
+
+export type EnterWeightMutation = (
+  { __typename?: 'Mutation' }
+  & { enterWeight: (
+    { __typename?: 'UserResponse' }
+    & RegularUserResponseFragment
+  ) }
+);
+
 export type LoginUserMutationVariables = Exact<{
   loginUserInput: LoginUserInput;
 }>;
@@ -360,6 +375,19 @@ export type LoginUserMutationVariables = Exact<{
 export type LoginUserMutation = (
   { __typename?: 'Mutation' }
   & { loginUser: (
+    { __typename?: 'UserResponse' }
+    & RegularUserResponseFragment
+  ) }
+);
+
+export type ProfilePictureMutationVariables = Exact<{
+  file: Scalars['Upload'];
+}>;
+
+
+export type ProfilePictureMutation = (
+  { __typename?: 'Mutation' }
+  & { profilePicture: (
     { __typename?: 'UserResponse' }
     & RegularUserResponseFragment
   ) }
@@ -615,6 +643,38 @@ export function useDeleteFoodMutation(baseOptions?: Apollo.MutationHookOptions<D
 export type DeleteFoodMutationHookResult = ReturnType<typeof useDeleteFoodMutation>;
 export type DeleteFoodMutationResult = Apollo.MutationResult<DeleteFoodMutation>;
 export type DeleteFoodMutationOptions = Apollo.BaseMutationOptions<DeleteFoodMutation, DeleteFoodMutationVariables>;
+export const EnterWeightDocument = gql`
+    mutation EnterWeight($currentWeight: Float!) {
+  enterWeight(currentWeight: $currentWeight) {
+    ...RegularUserResponse
+  }
+}
+    ${RegularUserResponseFragmentDoc}`;
+export type EnterWeightMutationFn = Apollo.MutationFunction<EnterWeightMutation, EnterWeightMutationVariables>;
+
+/**
+ * __useEnterWeightMutation__
+ *
+ * To run a mutation, you first call `useEnterWeightMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEnterWeightMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [enterWeightMutation, { data, loading, error }] = useEnterWeightMutation({
+ *   variables: {
+ *      currentWeight: // value for 'currentWeight'
+ *   },
+ * });
+ */
+export function useEnterWeightMutation(baseOptions?: Apollo.MutationHookOptions<EnterWeightMutation, EnterWeightMutationVariables>) {
+        return Apollo.useMutation<EnterWeightMutation, EnterWeightMutationVariables>(EnterWeightDocument, baseOptions);
+      }
+export type EnterWeightMutationHookResult = ReturnType<typeof useEnterWeightMutation>;
+export type EnterWeightMutationResult = Apollo.MutationResult<EnterWeightMutation>;
+export type EnterWeightMutationOptions = Apollo.BaseMutationOptions<EnterWeightMutation, EnterWeightMutationVariables>;
 export const LoginUserDocument = gql`
     mutation LoginUser($loginUserInput: LoginUserInput!) {
   loginUser(loginUserInput: $loginUserInput) {
@@ -647,6 +707,38 @@ export function useLoginUserMutation(baseOptions?: Apollo.MutationHookOptions<Lo
 export type LoginUserMutationHookResult = ReturnType<typeof useLoginUserMutation>;
 export type LoginUserMutationResult = Apollo.MutationResult<LoginUserMutation>;
 export type LoginUserMutationOptions = Apollo.BaseMutationOptions<LoginUserMutation, LoginUserMutationVariables>;
+export const ProfilePictureDocument = gql`
+    mutation ProfilePicture($file: Upload!) {
+  profilePicture(file: $file) {
+    ...RegularUserResponse
+  }
+}
+    ${RegularUserResponseFragmentDoc}`;
+export type ProfilePictureMutationFn = Apollo.MutationFunction<ProfilePictureMutation, ProfilePictureMutationVariables>;
+
+/**
+ * __useProfilePictureMutation__
+ *
+ * To run a mutation, you first call `useProfilePictureMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProfilePictureMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [profilePictureMutation, { data, loading, error }] = useProfilePictureMutation({
+ *   variables: {
+ *      file: // value for 'file'
+ *   },
+ * });
+ */
+export function useProfilePictureMutation(baseOptions?: Apollo.MutationHookOptions<ProfilePictureMutation, ProfilePictureMutationVariables>) {
+        return Apollo.useMutation<ProfilePictureMutation, ProfilePictureMutationVariables>(ProfilePictureDocument, baseOptions);
+      }
+export type ProfilePictureMutationHookResult = ReturnType<typeof useProfilePictureMutation>;
+export type ProfilePictureMutationResult = Apollo.MutationResult<ProfilePictureMutation>;
+export type ProfilePictureMutationOptions = Apollo.BaseMutationOptions<ProfilePictureMutation, ProfilePictureMutationVariables>;
 export const RegisterUserDocument = gql`
     mutation RegisterUser($registerUserInput: RegisterUserInput!) {
   registerUser(registerUserInput: $registerUserInput) {

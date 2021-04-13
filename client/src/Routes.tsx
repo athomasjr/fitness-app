@@ -14,6 +14,7 @@ import FoodLog from './pages/FoodLog'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import My404 from './pages/My404'
+import ProfilePictureUpload from './pages/ProfilePictureUpload'
 import Register from './pages/Register'
 import UpdateProfile from './pages/UpdateProfile'
 import UserProfile from './pages/UserProfile'
@@ -41,6 +42,11 @@ export default function Routes() {
 							exact
 							path='/food/add_food/:mealType/:date'
 							component={AddFood}
+						/>
+						<ProtectedRoute
+							exact
+							path='/profile/edit/avatar'
+							component={ProfilePictureUpload}
 						/>
 						{/* <Route render={() => <Redirect to='/' />} /> */}
 						<Route component={My404} />

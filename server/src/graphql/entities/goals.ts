@@ -5,13 +5,13 @@ import { Field, Float, ObjectType } from 'type-graphql'
 export class Goals {
 	@Field(() => Float, { nullable: true })
 	@Property({ required: true, default: 0 })
-	startingWeight!: number
+	startingWeight?: number
 
 	@Field(() => Float, { nullable: true })
 	@Property({ required: true, default: 0 })
-	currentWeight!: number
+	currentWeight?: number
 
 	@Field(() => Float, { nullable: true })
 	@Property({ required: true, default: 0 })
-	goalWeight!: number
+	goalWeight?: number
 }

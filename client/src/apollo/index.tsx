@@ -1,15 +1,11 @@
-import {
-	ApolloClient,
-	ApolloProvider,
-	createHttpLink,
-	InMemoryCache,
-} from '@apollo/client'
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
+import { createUploadLink } from 'apollo-upload-client'
 import Routes from '../Routes'
 import { LocalStorage } from '../types/authContext'
 import { UserResponse } from '../types/generated/graphql'
 
-const httpLink = createHttpLink({
+const httpLink = createUploadLink({
 	uri: 'http://localhost:3001/graphql',
 })
 

@@ -79,10 +79,11 @@ enum MealName {
 type Mutation {
   addMeal(addMealInput: AddMealInput!): Day!
   deleteFood(deleteFoodInput: DeleteFoodInput!): [Meal!]!
+  enterWeight(currentWeight: Float!): UserResponse!
   loginUser(loginUserInput: LoginUserInput!): UserResponse!
+  profilePicture(file: Upload!): UserResponse!
   registerUser(registerUserInput: RegisterUserInput!): UserResponse!
   updateProfile(updateProfileInput: UpdateProfileInput!): UserResponse!
-  updateUserGoals(userGoalInput: UserGoalsInput!): UserResponse!
 }
 
 type Nutrient {
@@ -114,7 +115,6 @@ input NutritionInput {
 type Query {
   day(date: String!): Day!
   dayTotals(date: String!, userId: String!): TotalNutrition!
-  hello: String!
   meals(date: String!, userId: String!): [Meal!]!
   user: User!
 }
@@ -143,6 +143,9 @@ input UpdateProfileInput {
   why: String
 }
 
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
 type User {
   _id: ID!
   about: String
@@ -157,12 +160,6 @@ type User {
   updatedAt: DateTime!
   username: String!
   why: String
-}
-
-input UserGoalsInput {
-  currentWeight: Float
-  goalWeight: Float
-  startingWeight: Float
 }
 
 type UserResponse {

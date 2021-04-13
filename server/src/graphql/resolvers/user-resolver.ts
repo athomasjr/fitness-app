@@ -1,3 +1,9 @@
+import { ApolloError, AuthenticationError } from 'apollo-server-express'
+import { compare, hash } from 'bcryptjs'
+import { config } from 'dotenv'
+import { FileUpload, GraphQLUpload } from 'graphql-upload'
+import moment from 'moment'
+import { extname } from 'path'
 import {
 	Arg,
 	Ctx,
@@ -6,26 +12,20 @@ import {
 	Resolver,
 	UseMiddleware,
 } from 'type-graphql'
-import { compare, hash } from 'bcryptjs'
-import { ApolloError, AuthenticationError } from 'apollo-server-express'
-import { generateToken } from '../../utils/generate-token'
-import { LoginUserInput } from './types/user/inputs/login-user'
-import { UserResponse } from './types/user/responses/user-response'
-import { User, UserModel } from '../entities/user'
-import { RegisterUserInput } from './types/user/inputs/register-user'
-import { UserGoalsInput } from './types/user/inputs/update-goals'
-import { MyContext } from '../../types'
+import { v4 as uuid } from 'uuid'
+import { s3 } from '../../AWS/s3'
 import { isAuth } from '../../middleware/isAuth'
-import moment from 'moment'
+import { MyContext } from '../../types'
+import { generateToken } from '../../utils/generate-token'
+import { User, UserModel } from '../entities/user'
+import { LoginUserInput } from './types/user/inputs/login-user'
+import { RegisterUserInput } from './types/user/inputs/register-user'
 import { UpdateProfileInput } from './types/user/inputs/update-profile'
+import { UserResponse } from './types/user/responses/user-response'
+config()
 
 @Resolver(User)
 export class UserResolver {
-	@Query(() => String)
-	hello() {
-		return 'hi!'
-	}
-
 	@Query(() => User)
 	@UseMiddleware(isAuth)
 	async user(@Ctx() { payload }: MyContext): Promise<User> {
@@ -117,35 +117,6 @@ export class UserResolver {
 
 	@Mutation(() => UserResponse)
 	@UseMiddleware(isAuth)
-	async updateUserGoals(
-		@Arg('userGoalInput')
-		{ currentWeight, goalWeight, startingWeight }: UserGoalsInput,
-		@Ctx() { payload }: MyContext
-	): Promise<UserResponse> {
-		try {
-			const user = payload
-
-			if (!user) {
-				throw new AuthenticationError('User not found ')
-			}
-			const userProfile = await UserModel.findById(user._id)
-			if (userProfile) {
-				userProfile.goals = { currentWeight, startingWeight, goalWeight }
-				await userProfile.save()
-			}
-
-			const token = generateToken(user)
-			return {
-				user: userProfile!,
-				token,
-			}
-		} catch (error) {
-			throw new ApolloError(error)
-		}
-	}
-
-	@Mutation(() => UserResponse)
-	@UseMiddleware(isAuth)
 	async updateProfile(
 		@Arg('updateProfileInput')
 		{
@@ -188,20 +159,92 @@ export class UserResolver {
 					}
 				}
 
-				// if (!userProfile.inspirations) {
-				// 	userProfile.inspirations = newInspirations
-				// }
-
-				// if (userProfile.inspirations && newInspirations) {
-				// 	newInspirations.map((i) => userProfile.inspirations?.push(i))
-				// 	// userProfile.inspirations.push(inspirations)
-				// }
 				await userProfile.save()
 			}
 			const token = generateToken(user)
 			return {
 				user: userProfile!,
 				token,
+			}
+		} catch (error) {
+			throw new ApolloError(error)
+		}
+	}
+
+	@Mutation(() => UserResponse)
+	@UseMiddleware(isAuth)
+	async enterWeight(
+		@Arg('currentWeight') currentWeight: number,
+		@Ctx() { payload }: MyContext
+	): Promise<UserResponse> {
+		try {
+			const user = payload
+
+			if (!user) {
+				throw new AuthenticationError('User not found')
+			}
+
+			const userProfile = await UserModel.findById(user._id)
+
+			if (!userProfile) {
+				throw new AuthenticationError('User Profile not found')
+			}
+
+			if (userProfile.goals && userProfile.goals.startingWeight === 0) {
+				userProfile.goals.currentWeight = currentWeight
+				userProfile.goals.startingWeight = currentWeight
+			}
+
+			if (userProfile.goals) {
+				userProfile.goals.currentWeight = currentWeight
+			}
+
+			await userProfile.save()
+
+			const token = generateToken(user)
+			return {
+				user: userProfile!,
+				token,
+			}
+		} catch (error) {
+			throw new ApolloError(error)
+		}
+	}
+	@Mutation(() => UserResponse)
+	@UseMiddleware(isAuth)
+	async profilePicture(
+		@Arg('file', () => GraphQLUpload!) file: FileUpload,
+		@Ctx() { payload }: MyContext
+	): Promise<UserResponse> {
+		const user = payload
+		if (!user) {
+			throw new AuthenticationError('User not found')
+		}
+		try {
+			const userProfile = await UserModel.findById(user._id)
+			if (!userProfile) {
+				throw new AuthenticationError('User Profile not found')
+			}
+
+			const { createReadStream, filename, mimetype } = await file
+
+			const { Location } = await s3
+				.upload({
+					Body: createReadStream(),
+					Key: `${process.env.AWS_DIR}/${uuid()}${extname(filename)}`,
+					ContentType: mimetype,
+					Bucket: process.env.AWS_BUCKET_NAME!,
+					ACL: 'public-read',
+				})
+				.promise()
+
+			userProfile.avatar = Location
+
+			await userProfile.save()
+
+			return {
+				user: userProfile,
+				token: generateToken(user),
 			}
 		} catch (error) {
 			throw new ApolloError(error)

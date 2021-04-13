@@ -29,7 +29,7 @@ if (storedUser && typeof storedUser === 'string') {
 const AuthContext = createContext<IAuthContext>({
 	user: null,
 	login: (userDate) => {},
-	update: (userData: UserResponse) => {},
+	updateUser: (userData: UserResponse) => {},
 	logout: () => {},
 })
 
@@ -44,7 +44,7 @@ function AuthProvider(props: any) {
 		localStorage.setItem(LocalStorage.USER, JSON.stringify(userData))
 	}
 
-	function update(userData: UserResponse) {
+	function updateUser(userData: UserResponse) {
 		dispatch({
 			type: AUTHACTIONENUM.UPDATE,
 			payload: userData,
@@ -61,7 +61,7 @@ function AuthProvider(props: any) {
 	}
 	return (
 		<AuthContext.Provider
-			value={{ user: state.user, login, update, logout }}
+			value={{ user: state.user, login, updateUser, logout }}
 			{...props}
 		/>
 	)

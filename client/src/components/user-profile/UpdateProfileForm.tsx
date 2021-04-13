@@ -1,6 +1,6 @@
 import { Formik } from 'formik'
-import { Form, Button } from 'semantic-ui-react'
 import { useHistory } from 'react-router-dom'
+import { Button, Form } from 'semantic-ui-react'
 import { useAuthContext } from '../../context/auth/auth'
 import {
 	UpdateProfileInput,
@@ -9,7 +9,7 @@ import {
 import FormError from '../form/FormError'
 
 export default function UpdateProfileForm() {
-	const { user, update } = useAuthContext()
+	const { user, updateUser } = useAuthContext()
 	const history = useHistory()
 	const [updateProfile, { loading }] = useUpdateProfileMutation()
 
@@ -31,7 +31,7 @@ export default function UpdateProfileForm() {
 				update(_, { data }) {
 					if (data) {
 						const { updateProfile: userData } = data
-						update(userData)
+						updateUser(userData)
 						history.push('/profile')
 					}
 				},
