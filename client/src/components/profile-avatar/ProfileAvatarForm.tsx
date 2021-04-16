@@ -1,27 +1,18 @@
 import { Formik } from 'formik'
-import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { Button, Form, Header, Icon } from 'semantic-ui-react'
-import * as Yup from 'yup'
 import { useAuthContext } from '../../context/auth/auth'
 import {
 	ProfilePictureMutationVariables,
 	useProfilePictureMutation,
 } from '../../types/generated/graphql'
+import { profilePictureValidation } from '../../validation'
 import FormError from '../form/FormError'
 
 export default function ProfileAvatarForm() {
 	const { updateUser } = useAuthContext()
 	const [uploadPicture, { loading, error }] = useProfilePictureMutation()
 	const history = useHistory()
-
-	const validationSchema = Yup.object().shape({
-		file: Yup.mixed()
-			.required('You must provide an image')
-			.test('imageSize', 'The image is too large', (value: any) => {
-				return value && value.size <= 200000
-			}),
-	})
 
 	async function upload(
 		values: ProfilePictureMutationVariables,
@@ -55,7 +46,7 @@ export default function ProfileAvatarForm() {
 	return (
 		<Formik<ProfilePictureMutationVariables>
 			initialValues={{ file: null }}
-			validationSchema={validationSchema}
+			validationSchema={profilePictureValidation}
 			onSubmit={async (values, { setErrors }) => upload(values.file, setErrors)}
 		>
 			{({ handleSubmit, errors, setFieldValue }) => (

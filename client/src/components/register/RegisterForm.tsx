@@ -7,6 +7,7 @@ import {
 	RegisterUserInput,
 	useRegisterUserMutation,
 } from '../../types/generated/graphql'
+import { registerValidation } from '../../validation'
 import FormError from '../form/FormError'
 import MyDatePicker from '../form/MyDatePicker'
 import MySelect from '../form/MySelect'
@@ -48,6 +49,7 @@ export default function RegisterForm() {
 	return (
 		<Formik
 			onSubmit={(data, { setErrors }) => register(data, setErrors)}
+			validationSchema={registerValidation}
 			initialValues={registerUserValues}
 		>
 			{({

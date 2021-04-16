@@ -16,7 +16,6 @@ export class Day {
 	@Property({
 		required: true,
 		default: moment().format('YYYY-MM-DD'),
-		// unique: true,
 	})
 	date!: string
 

@@ -1,7 +1,8 @@
 import { useFormik } from 'formik'
-import { Button, Form, Modal } from 'semantic-ui-react'
+import { Button, Form, Message, Modal } from 'semantic-ui-react'
 import { useAuthContext } from '../../../context/auth/auth'
 import { useEnterWeightMutation } from '../../../types/generated/graphql'
+import { weightValidation } from '../../../validation/index'
 
 export interface IWeightModalProps {
 	open: boolean
@@ -14,6 +15,7 @@ export default function WeightModal({ open, onClose }: IWeightModalProps) {
 
 	const formik = useFormik({
 		enableReinitialize: true,
+		validationSchema: weightValidation,
 		initialValues: { currentWeight: '' },
 		onSubmit: (values, { resetForm }) => {
 			handleEnterWeight(values.currentWeight)
@@ -51,7 +53,11 @@ export default function WeightModal({ open, onClose }: IWeightModalProps) {
 					<Form.Input
 						placeholder="Today's weight"
 						{...formik.getFieldProps('currentWeight')}
+						error={formik.errors.currentWeight ? true : false}
 					/>
+					{formik.errors.currentWeight ? (
+						<Message negative content={formik.errors.currentWeight} />
+					) : null}
 					<Button.Group>
 						<Button onClick={onClose}>Cancel</Button>
 						<Button.Or />

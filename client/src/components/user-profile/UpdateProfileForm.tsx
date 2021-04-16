@@ -6,6 +6,7 @@ import {
 	UpdateProfileInput,
 	useUpdateProfileMutation,
 } from '../../types/generated/graphql'
+import { updateProfileValidation } from '../../validation'
 import FormError from '../form/FormError'
 
 export default function UpdateProfileForm() {
@@ -52,6 +53,7 @@ export default function UpdateProfileForm() {
 	return (
 		<Formik<UpdateProfileInput>
 			onSubmit={(data, { setErrors }) => handleUpdate(data, setErrors)}
+			validationSchema={updateProfileValidation}
 			initialValues={{
 				about: aboutValue,
 				why: whyValue,

@@ -1,5 +1,5 @@
-import { MinLength, MaxLength, IsEmail, IsNotEmpty } from 'class-validator'
-import { InputType, Field } from 'type-graphql'
+import { IsEmail, IsNotEmpty, MaxLength, MinLength } from 'class-validator'
+import { Field, InputType } from 'type-graphql'
 import { IsEmailAlreadyExists } from '../../../../../utils/validators/isEmailAlreadyExists'
 import { IsUserAlreadyExists } from '../../../../../utils/validators/isUserAlreadyExists'
 import { Match } from '../../../../../utils/validators/Match'
@@ -34,13 +34,4 @@ export class RegisterUserInput implements Partial<User> {
 	@IsNotEmpty({ message: 'Gender is required' })
 	@Field(() => Gender)
 	gender!: Gender
-
-	// @Field(() => Float, { nullable: true })
-	// startingWeight!: number
-
-	// @Field(() => Float, { nullable: true })
-	// currentWeight!: number
-
-	// @Field(() => Float, { nullable: true })
-	// goalWeight!: number
 }

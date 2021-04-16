@@ -244,8 +244,7 @@ export class UserResolver {
 
 			return {
 				user: userProfile,
-				token: generateToken(user),
-			}
+				token: generateToken(user)			}
 		} catch (error) {
 			throw new ApolloError(error)
 		}

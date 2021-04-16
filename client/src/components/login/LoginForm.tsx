@@ -6,6 +6,7 @@ import {
 	LoginUserInput,
 	useLoginUserMutation,
 } from '../../types/generated/graphql'
+import { loginValidation } from '../../validation'
 import FormError from '../form/FormError'
 
 export interface ILoginFormProps {
@@ -47,9 +48,10 @@ export default function LoginForm({ heading }: ILoginFormProps) {
 	return (
 		<Formik<LoginUserInput>
 			initialValues={{
-				username: 'antonio',
-				password: '123456',
+				username: '',
+				password: '',
 			}}
+			validationSchema={loginValidation}
 			onSubmit={(loginValues, { setErrors }) => login(loginValues, setErrors)}
 		>
 			{({ values, handleSubmit, handleChange, errors }) => (
