@@ -11,7 +11,7 @@ import FormError from '../form/FormError'
 
 export default function ProfileAvatarForm() {
 	const { updateUser } = useAuthContext()
-	const [uploadPicture, { loading, error }] = useProfilePictureMutation()
+	const [uploadPicture, { loading }] = useProfilePictureMutation()
 	const history = useHistory()
 
 	async function upload(

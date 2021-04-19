@@ -3,6 +3,7 @@ import cors from 'cors'
 import { config } from 'dotenv'
 import express, { Application, json, urlencoded } from 'express'
 import { graphqlUploadExpress } from 'graphql-upload'
+import path from 'path'
 import 'reflect-metadata'
 import { connectDb } from './config/db'
 import { schema } from './graphql/schema'
@@ -16,6 +17,10 @@ async function main() {
 	app.use(json())
 	app.use(urlencoded({ extended: true }))
 	app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }))
+	app.use(express.static(path.join(__dirname, 'client/build')))
+	app.get('*', (req, res) => {
+		res.sendFile(path.join(__dirname + '/client/build/index.html'))
+	})
 
 	const apolloServer = new ApolloServer({
 		schema: await schema(),

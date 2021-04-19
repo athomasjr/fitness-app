@@ -10,7 +10,7 @@ export interface IWeightModalProps {
 }
 
 export default function WeightModal({ open, onClose }: IWeightModalProps) {
-	const { user, updateUser } = useAuthContext()
+	const { updateUser } = useAuthContext()
 	const [enterWeight, { loading }] = useEnterWeightMutation()
 
 	const formik = useFormik({
