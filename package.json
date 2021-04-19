@@ -1,0 +1,20 @@
+{
+	"name": "fitness-app",
+	"version": "1.0.0",
+	"description": "",
+	"main": "server/dist/index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node server/dist/index.js",
+		"heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/athomasjr/fitness-app.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC"
+
+
+}

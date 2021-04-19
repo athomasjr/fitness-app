@@ -38,14 +38,3 @@ async function main() {
 }
 
 main().catch((error) => console.error(error))
-
-//* Working with FoodCentral API
-
-// const params = {
-// 	api_key: process.env.FOOD_CENTRAL_API_KEY,
-// 	query: 'cheddar cheese',
-// 	dataType: ['Survey (FNDDS)', 'Branded'],
-// 	pagesize: 5,
-// }
-
-// curl https://api.nal.usda.gov/fdc/v1/foods/search?api_key=xVtzAQZafgnCbtcAqCB7rS4rilyrQCIaR4io2skv&query=Cheddar%20Cheese
