@@ -8,13 +8,9 @@
 		"npm": "6.14.11"
 	},
 	"scripts": {
-		"start:build": "tsc",
-		"postinstall": "npm run build",
-		"build": "cd server && tsc",
-		"serve": "node server/dist/index.js",
-		"start:run": "nodemon dist/index.js",
-		"start:dev": "concurrently \" tsc -w\" \"npm run start:run\"",
-		"start": "npm run serve"
+		"start": "node server/dist/index.js",
+		"postinstall": "cd server && tsc",
+		"watch-node": "nodemon server/dist/index.js"
 	},
 	"keywords": [],
 	"author": "",
