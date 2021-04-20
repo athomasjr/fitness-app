@@ -1,6 +1,6 @@
 import { ApolloServer } from 'apollo-server-express'
 import cors from 'cors'
-import { config } from 'dotenv'
+import dotenv from 'dotenv'
 import express, { Application, json, urlencoded } from 'express'
 import { graphqlUploadExpress } from 'graphql-upload'
 import path from 'path'
@@ -8,9 +8,9 @@ import 'reflect-metadata'
 import { connectDb } from './config/db'
 import { schema } from './graphql/schema'
 import { formatErrors } from './utils/formatErrors'
+dotenv.config()
 
 async function main() {
-	config()
 	const mongoUri: string = process.env.MONGO_URI!.toString()
 	const app: Application = express()
 	await connectDb(mongoUri)
