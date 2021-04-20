@@ -2,9 +2,9 @@ import { config } from 'dotenv'
 import mongoose from 'mongoose'
 config()
 
-export async function connectDb(mongoUri: string) {
+export async function connectDb() {
 	try {
-		const conn = await mongoose.connect(mongoUri, {
+		const conn = await mongoose.connect(`${process.env.MONGO_URI}`, {
 			useCreateIndex: true,
 			useUnifiedTopology: true,
 			useNewUrlParser: true,

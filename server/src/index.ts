@@ -9,11 +9,10 @@ import { connectDb } from './config/db'
 import { schema } from './graphql/schema'
 import { formatErrors } from './utils/formatErrors'
 dotenv.config()
-const mongoUri: any = process.env.MONGO_URI
 
 async function main() {
 	const app: Application = express()
-	await connectDb(mongoUri)
+	await connectDb()
 	app.use(cors())
 	app.use(json())
 	app.use(urlencoded({ extended: true }))
