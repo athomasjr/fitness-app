@@ -10,6 +10,8 @@ import { schema } from './graphql/schema'
 import { formatErrors } from './utils/formatErrors'
 
 config()
+const PORT: number | string = process.env.PORT || 3001
+
 async function main() {
 	const mongoUri: string = process.env.MONGO_URI!
 	const app: Application = express()
@@ -32,8 +34,6 @@ async function main() {
 	})
 
 	apolloServer.applyMiddleware({ app })
-
-	const PORT: number | string = process.env.PORT || 3001
 
 	app.listen(PORT, () => console.log(`Server running on localhost:${PORT}`))
 }
