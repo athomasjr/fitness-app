@@ -31,10 +31,7 @@ async function main() {
 
 	apolloServer.applyMiddleware({ app })
 
-	let PORT: any = process.env.Port
-	if (PORT == null || PORT == '') {
-		PORT = 3001
-	}
+	const PORT: any = process.env.Port
 
 	app.listen(PORT, () => console.log(`Server running on localhost:${PORT}`))
 }
