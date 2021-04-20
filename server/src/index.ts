@@ -8,11 +8,11 @@ import 'reflect-metadata'
 import { connectDb } from './config/db'
 import { schema } from './graphql/schema'
 import { formatErrors } from './utils/formatErrors'
-dotenv.config()
 
-const mongoUri: string = process.env.MONGO_URI!.toString()
 async function main() {
 	const app: Application = express()
+	dotenv.config()
+	const mongoUri: any = process.env.MONGO_URI!
 	await connectDb(mongoUri)
 	app.use(cors())
 	app.use(json())
