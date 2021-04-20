@@ -9,10 +9,11 @@ import { connectDb } from './config/db'
 import { schema } from './graphql/schema'
 import { formatErrors } from './utils/formatErrors'
 
+config()
 async function main() {
-	config()
+	const mongoUri: string = process.env.MONGO_URI!
 	const app: Application = express()
-	await connectDb()
+	await connectDb(mongoUri)
 	app.use(cors())
 	app.use(json())
 	app.use(urlencoded({ extended: true }))

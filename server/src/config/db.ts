@@ -1,7 +1,8 @@
+import { config } from 'dotenv'
 import mongoose from 'mongoose'
+config()
 
-export async function connectDb() {
-	const mongoUri: string = process.env.MONGO_URI!.toString()
+export async function connectDb(mongoUri: string) {
 	try {
 		const conn = await mongoose.connect(mongoUri, {
 			useCreateIndex: true,
