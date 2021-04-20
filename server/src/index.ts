@@ -19,7 +19,7 @@ async function main() {
 	app.use(express.static(path.join(__dirname, 'client/build')))
 
 	app.get('*', (_req, res) => {
-		res.sendFile(path.join(__dirname + '/client/build/index.html'))
+		res.sendFile(path.join(__dirname, 'build', 'index.html'))
 	})
 
 	const apolloServer = new ApolloServer({
@@ -31,7 +31,7 @@ async function main() {
 
 	apolloServer.applyMiddleware({ app })
 
-	const PORT: any = process.env.PORT
+	const PORT = process.env.PORT ? process.env.PORT : 3001
 
 	app.listen(PORT, () => console.log(`Server running on localhost:${PORT}`))
 }
