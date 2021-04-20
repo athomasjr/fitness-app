@@ -9,10 +9,12 @@
 	},
 	"scripts": {
 		"start:build": "tsc",
-		"serve": "node dist/index.js",
+		"postinstall": "npm run build",
+		"build": "cd server && tsc",
+		"serve": "node server/dist/index.js",
 		"start:run": "nodemon dist/index.js",
 		"start:dev": "concurrently \" tsc -w\" \"npm run start:run\"",
-		"start": "node server/dist/index.js"
+		"start": "npm run serve"
 	},
 	"keywords": [],
 	"author": "",
