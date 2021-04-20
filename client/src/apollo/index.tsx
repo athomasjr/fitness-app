@@ -5,7 +5,7 @@ import Routes from '../Routes'
 import { LocalStorage } from '../types/authContext'
 import { UserResponse } from '../types/generated/graphql'
 
-const httpLink = createUploadLink({
+const httpLink: any = createUploadLink({
 	uri: 'http://localhost:3001/graphql',
 })
 
