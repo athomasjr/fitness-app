@@ -5,14 +5,13 @@ import express, { Application, json, urlencoded } from 'express'
 import { graphqlUploadExpress } from 'graphql-upload'
 import path from 'path'
 import 'reflect-metadata'
-import { connectDb } from './config/db'
 import { schema } from './graphql/schema'
 import { formatErrors } from './utils/formatErrors'
 dotenv.config()
 
 async function main() {
 	const app: Application = express()
-	await connectDb()
+	// await connectDb()
 	app.use(cors())
 	app.use(json())
 	app.use(urlencoded({ extended: true }))
