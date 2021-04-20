@@ -10,7 +10,7 @@ import { schema } from './graphql/schema'
 import { formatErrors } from './utils/formatErrors'
 
 config()
-const PORT: number | string = process.env.PORT || 3001
+const PORT: any | string = process.env.PORT || 3001
 
 async function main() {
 	const mongoUri: string = process.env.MONGO_URI!
