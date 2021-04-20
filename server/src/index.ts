@@ -11,7 +11,7 @@ import { formatErrors } from './utils/formatErrors'
 
 async function main() {
 	config()
-	const mongoUri: string = process.env.MONGO_URI!
+	const mongoUri: string = process.env.MONGO_URI!.toString()
 	const app: Application = express()
 	await connectDb(mongoUri)
 	app.use(cors())
