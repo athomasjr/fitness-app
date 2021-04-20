@@ -12,7 +12,7 @@ import { formatErrors } from './utils/formatErrors'
 async function main() {
 	const app: Application = express()
 	dotenv.config()
-	const mongoUri: any = process.env.MONGO_URI!
+	const mongoUri: any = process.env.MONGO_URI
 	await connectDb(mongoUri)
 	app.use(cors())
 	app.use(json())
