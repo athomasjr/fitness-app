@@ -10,8 +10,8 @@ import { schema } from './graphql/schema'
 import { formatErrors } from './utils/formatErrors'
 dotenv.config()
 
+const mongoUri: string = process.env.MONGO_URI!.toString()
 async function main() {
-	const mongoUri: string = process.env.MONGO_URI!.toString()
 	const app: Application = express()
 	await connectDb(mongoUri)
 	app.use(cors())
