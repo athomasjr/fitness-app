@@ -8,8 +8,7 @@
 		"serve": "node dist/index.js",
 		"start:run": "nodemon dist/index.js",
 		"start:dev": "concurrently \" tsc -w\" \"npm run start:run\"",
-		"start": "node server/dist/index.js",
-		"heroku-postbuild": "cd client && npm install && npm run build"
+		"start": "node server/dist/index.js"
 	},
 	"keywords": [],
 	"author": "",
