@@ -9,8 +9,9 @@
 	},
 	"scripts": {
 		"start": "node server/dist/index.js",
-		"postinstall": "cd server && tsc && cd .. && cd client && npm run build",
-		"test": "cd server && tsc && cd .. && cd client && npm run build",
+		"postinstall": "cd server && tsc && npm run build-client",
+		"test": "cd server && tsc && npm run build-client",
+		"build-client": "cd client && npm run build",
 		"watch-node": "nodemon server/dist/index.js"
 	},
 	"keywords": [],
