@@ -17,10 +17,10 @@ async function main() {
 	app.use(json())
 	app.use(urlencoded({ extended: true }))
 	app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }))
-	app.use(express.static(path.join(__dirname, '/client/build')))
+	app.use(express.static(path.join(__dirname, 'build')))
 
 	app.get('*', (_req, res) => {
-		res.sendFile(path.join(__dirname, '/client/build', 'index.html'))
+		res.sendFile(path.join(__dirname, 'build', 'index.html'))
 	})
 
 	const apolloServer = new ApolloServer({
