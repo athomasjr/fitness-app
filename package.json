@@ -11,7 +11,7 @@
 		"start": "node server/dist/index.js",
 		"postinstall": "cd server && tsc && npm run build-client",
 		"test": "cd server && tsc && npm run build-client",
-		"build-client": "cd client && npm run build",
+		"build-client": "cd client && npm i && npm run build",
 		"watch-node": "nodemon server/dist/index.js"
 	},
 	"keywords": [],
