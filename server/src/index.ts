@@ -12,6 +12,7 @@ dotenv.config()
 async function main() {
 	const app: Application = express()
 	// await connectDb()
+
 	app.use(cors())
 	app.use(json())
 	app.use(urlencoded({ extended: true }))
