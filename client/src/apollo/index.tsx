@@ -6,7 +6,8 @@ import { LocalStorage } from '../types/authContext'
 import { UserResponse } from '../types/generated/graphql'
 
 const httpLink: any = createUploadLink({
-	uri: 'http://localhost:3001/graphql',
+	// uri: 'http://localhost:3001/graphql',
+	uri: '/graphql',
 })
 
 const authLink = setContext(() => {
