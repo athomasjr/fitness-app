@@ -3,9 +3,9 @@ import mongoose from 'mongoose'
 config()
 
 export async function connectDb() {
-	const uri = process.env.MONGODB_URI
+	const uri: any = process.env.MONGODB_URI
 	try {
-		const conn = await mongoose.connect(uri!.toString(), {
+		const conn = await mongoose.connect(uri, {
 			useCreateIndex: true,
 			useUnifiedTopology: true,
 			useNewUrlParser: true,
@@ -14,6 +14,6 @@ export async function connectDb() {
 		console.log(`MongoDB connected to ${conn.connection.host}`)
 	} catch (error) {
 		console.error(`Error: ${error.message}`)
-		process.exit(1)
+		// process.exit(1)
 	}
 }
