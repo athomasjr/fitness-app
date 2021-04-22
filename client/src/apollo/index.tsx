@@ -7,7 +7,7 @@ import { UserResponse } from '../types/generated/graphql'
 
 const httpLink: any = createUploadLink({
 	// uri: 'http://localhost:3001/graphql',
-	uri: '/graphql',
+	uri: process.env.PUBLIC_URL,
 })
 
 const authLink = setContext(() => {
