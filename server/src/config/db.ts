@@ -3,8 +3,9 @@ import mongoose from 'mongoose'
 config()
 
 export async function connectDb() {
+	const uri = process.env.MONGODB_URI
 	try {
-		const conn = await mongoose.connect(`${process.env.MONGODB_URI}`, {
+		const conn = await mongoose.connect(uri!.toString(), {
 			useCreateIndex: true,
 			useUnifiedTopology: true,
 			useNewUrlParser: true,
