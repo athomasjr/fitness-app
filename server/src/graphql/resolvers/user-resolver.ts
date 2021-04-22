@@ -104,11 +104,9 @@ export class UserResolver {
 				throw new AuthenticationError('Wrong credentials')
 			}
 
-			const token = generateToken(user!)
-
 			return {
 				user: user!,
-				token,
+				token: generateToken(user!),
 			}
 		} catch (error) {
 			throw new ApolloError(error)
@@ -244,7 +242,8 @@ export class UserResolver {
 
 			return {
 				user: userProfile,
-				token: generateToken(user)			}
+				token: generateToken(user),
+			}
 		} catch (error) {
 			throw new ApolloError(error)
 		}
