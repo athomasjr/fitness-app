@@ -25,16 +25,26 @@
 npm install
 ```
 
+```sh
+cd client && npm install
+```
+
 ## Usage
+
+### Server
+
+```sh
+npm run build:server
+```
 
 ```sh
 npm run start
 ```
 
-## Run tests
+### Client
 
 ```sh
-npm run test
+cd client && npm run start
 ```
 
 ## Author
