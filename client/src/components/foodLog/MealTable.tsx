@@ -1,23 +1,23 @@
-import { Link } from 'react-router-dom'
-import { Button, Icon, Label, Table } from 'semantic-ui-react'
-import { useAuthContext } from '../../context/auth/auth'
+import { Link } from 'react-router-dom';
+import { Button, Icon, Label, Table } from 'semantic-ui-react';
+import { useAuthContext } from '../../context/auth/auth';
 import {
 	Meal,
 	MealName,
 	useDeleteFoodMutation,
-} from '../../types/generated/graphql'
-import { capitalize } from '../../utils/helpers/capitalize'
+} from '../../types/generated/graphql';
+import { capitalize } from '../../utils/helpers/capitalize';
 
 export interface IMealTableProps {
-	meal: Meal
-	mealType: MealName
-	date: any
+	meal: Meal;
+	mealType: MealName;
+	date: any;
 }
 
 export default function MealTable({ meal, mealType, date }: IMealTableProps) {
-	const { user } = useAuthContext()
+	const { user } = useAuthContext();
 
-	const [deleteFood] = useDeleteFoodMutation()
+	const [deleteFood] = useDeleteFoodMutation();
 
 	async function handleDeleteFood(idx: number) {
 		try {
@@ -30,9 +30,9 @@ export default function MealTable({ meal, mealType, date }: IMealTableProps) {
 						foodIdx: idx,
 					},
 				},
-			})
-		} catch (error) {
-			console.error(error)
+			});
+		} catch (error: any) {
+			console.error(error);
 		}
 	}
 
@@ -62,7 +62,7 @@ export default function MealTable({ meal, mealType, date }: IMealTableProps) {
 								_id,
 								foodName,
 								foodNutrition: { calories, protein, carbs, fat },
-							} = food
+							} = food;
 							return (
 								<Table.Row key={_id}>
 									<Table.Cell collapsing>
@@ -79,7 +79,7 @@ export default function MealTable({ meal, mealType, date }: IMealTableProps) {
 									<Table.Cell>{carbs?.value}</Table.Cell>
 									<Table.Cell>{fat?.value}</Table.Cell>
 								</Table.Row>
-							)
+							);
 						})
 					) : (
 						<Table.Row></Table.Row>
@@ -129,5 +129,5 @@ export default function MealTable({ meal, mealType, date }: IMealTableProps) {
 				</Table.Footer>
 			</Table>
 		</div>
-	)
+	);
 }

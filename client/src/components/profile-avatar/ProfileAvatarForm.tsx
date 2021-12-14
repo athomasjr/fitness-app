@@ -1,18 +1,18 @@
-import { Formik } from 'formik'
-import { useHistory } from 'react-router-dom'
-import { Button, Form, Header, Icon } from 'semantic-ui-react'
-import { useAuthContext } from '../../context/auth/auth'
+import { Formik } from 'formik';
+import { useHistory } from 'react-router-dom';
+import { Button, Form, Header, Icon } from 'semantic-ui-react';
+import { useAuthContext } from '../../context/auth/auth';
 import {
 	ProfilePictureMutationVariables,
 	useProfilePictureMutation,
-} from '../../types/generated/graphql'
-import { profilePictureValidation } from '../../validation'
-import FormError from '../form/FormError'
+} from '../../types/generated/graphql';
+import { profilePictureValidation } from '../../validation';
+import FormError from '../form/FormError';
 
 export default function ProfileAvatarForm() {
-	const { updateUser } = useAuthContext()
-	const [uploadPicture, { loading }] = useProfilePictureMutation()
-	const history = useHistory()
+	const { updateUser } = useAuthContext();
+	const [uploadPicture, { loading }] = useProfilePictureMutation();
+	const history = useHistory();
 
 	async function upload(
 		values: ProfilePictureMutationVariables,
@@ -22,24 +22,24 @@ export default function ProfileAvatarForm() {
 			await uploadPicture({
 				update(_, { data }) {
 					if (data) {
-						const { profilePicture: userData } = data
-						updateUser(userData)
-						history.push('/profile')
+						const { profilePicture: userData } = data;
+						updateUser(userData);
+						history.push('/profile');
 					}
 				},
 				variables: { file: values },
-			})
-		} catch (error) {
-			const errors: { [key: string]: string } = {}
+			});
+		} catch (error: any) {
+			const errors: { [key: string]: string } = {};
 			error.graphQLErrors[0].extensions.exception.validationErrors.forEach(
 				(validationErr: any) => {
 					Object.values(validationErr.constraints).forEach((message: any) => {
-						errors[validationErr.property] = message
-					})
+						errors[validationErr.property] = message;
+					});
 				}
-			)
+			);
 
-			setErrors(errors)
+			setErrors(errors);
 		}
 	}
 
@@ -81,5 +81,5 @@ export default function ProfileAvatarForm() {
 				</div>
 			)}
 		</Formik>
-	)
+	);
 }

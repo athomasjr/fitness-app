@@ -1,47 +1,47 @@
-import { Formik } from 'formik'
-import { useHistory } from 'react-router-dom'
-import { Button, Form } from 'semantic-ui-react'
-import { useAuthContext } from '../../context/auth/auth'
+import { Formik } from 'formik';
+import { useHistory } from 'react-router-dom';
+import { Button, Form } from 'semantic-ui-react';
+import { useAuthContext } from '../../context/auth/auth';
 import {
 	LoginUserInput,
 	useLoginUserMutation,
-} from '../../types/generated/graphql'
-import { loginValidation } from '../../validation'
-import FormError from '../form/FormError'
+} from '../../types/generated/graphql';
+import { loginValidation } from '../../validation';
+import FormError from '../form/FormError';
 
 export interface ILoginFormProps {
-	heading?: string
+	heading?: string;
 }
 
 export default function LoginForm({ heading }: ILoginFormProps) {
-	const context = useAuthContext()
-	const [loginUser, { loading }] = useLoginUserMutation()
-	const history = useHistory()
+	const context = useAuthContext();
+	const [loginUser, { loading }] = useLoginUserMutation();
+	const history = useHistory();
 
 	async function login(loginValues: LoginUserInput, setErrors: Function) {
 		try {
 			await loginUser({
 				update(_, { data }) {
 					if (data) {
-						const { loginUser: userData } = data
-						context.login(userData)
-						history.push('/')
+						const { loginUser: userData } = data;
+						context.login(userData);
+						history.push('/');
 					}
 				},
 				variables: {
 					loginUserInput: loginValues,
 				},
-			})
-		} catch (error) {
-			const errors: { [key: string]: string } = {}
+			});
+		} catch (error: any) {
+			const errors: { [key: string]: string } = {};
 			error.graphQLErrors[0].extensions.exception.validationErrors.forEach(
 				(validationErr: any) => {
 					Object.values(validationErr.constraints).forEach((message: any) => {
-						errors[validationErr.property] = message
-					})
+						errors[validationErr.property] = message;
+					});
 				}
-			)
-			setErrors(errors)
+			);
+			setErrors(errors);
 		}
 	}
 
@@ -96,5 +96,5 @@ export default function LoginForm({ heading }: ILoginFormProps) {
 				</div>
 			)}
 		</Formik>
-	)
+	);
 }

@@ -1,36 +1,36 @@
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom';
 import {
 	Food,
 	MealName,
 	useAddMealMutation,
-} from '../../../types/generated/graphql'
-import SearchDisplay, { ISearchDisplayProps } from '../SearchDisplay'
+} from '../../../types/generated/graphql';
+import SearchDisplay, { ISearchDisplayProps } from '../SearchDisplay';
 
 export interface ISearchDisplayContainerProps {
-	foods: Food[]
+	foods: Food[];
 }
 
 export default function SearchDisplayContainer({
 	foods,
 }: ISearchDisplayContainerProps) {
-	const history = useHistory()
-	const { date, mealType } = useParams<{ date: string; mealType: MealName }>()
+	const history = useHistory();
+	const { date, mealType } = useParams<{ date: string; mealType: MealName }>();
 
-	let name: MealName = MealName.Snacks
+	let name: MealName = MealName.Snacks;
 
 	switch (mealType) {
 		case 'BREAKFAST':
-			name = MealName.Breakfast
-			break
+			name = MealName.Breakfast;
+			break;
 		case 'LUNCH':
-			name = MealName.Lunch
-			break
+			name = MealName.Lunch;
+			break;
 		case 'DINNER':
-			name = MealName.Dinner
-			break
+			name = MealName.Dinner;
+			break;
 	}
 
-	const [addMeal] = useAddMealMutation()
+	const [addMeal] = useAddMealMutation();
 
 	async function handleAddMeal(food: Food) {
 		try {
@@ -67,12 +67,12 @@ export default function SearchDisplayContainer({
 						name,
 					},
 				},
-			})
-			history.push('/food/log')
-		} catch (error) {
-			console.error(error.message)
+			});
+			history.push('/food/log');
+		} catch (error: any) {
+			console.error(error.message);
 		}
 	}
-	const props: ISearchDisplayProps = { handleAddMeal, foods }
-	return <SearchDisplay {...props} />
+	const props: ISearchDisplayProps = { handleAddMeal, foods };
+	return <SearchDisplay {...props} />;
 }

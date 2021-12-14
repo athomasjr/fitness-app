@@ -1,27 +1,27 @@
-import { Formik } from 'formik'
-import { useHistory } from 'react-router-dom'
-import { Button, Form } from 'semantic-ui-react'
-import { useAuthContext } from '../../context/auth/auth'
+import { Formik } from 'formik';
+import { useHistory } from 'react-router-dom';
+import { Button, Form } from 'semantic-ui-react';
+import { useAuthContext } from '../../context/auth/auth';
 import {
 	UpdateProfileInput,
 	useUpdateProfileMutation,
-} from '../../types/generated/graphql'
-import { updateProfileValidation } from '../../validation'
-import FormError from '../form/FormError'
+} from '../../types/generated/graphql';
+import { updateProfileValidation } from '../../validation';
+import FormError from '../form/FormError';
 
 export default function UpdateProfileForm() {
-	const { user, updateUser } = useAuthContext()
-	const history = useHistory()
-	const [updateProfile, { loading }] = useUpdateProfileMutation()
+	const { user, updateUser } = useAuthContext();
+	const history = useHistory();
+	const [updateProfile, { loading }] = useUpdateProfileMutation();
 
 	const iValue0 =
-		user && user.user.inspirations ? user.user.inspirations[0] : ''
+		user && user.user.inspirations ? user.user.inspirations[0] : '';
 	const iValue1 =
-		user && user.user.inspirations ? user.user.inspirations[1] : ''
+		user && user.user.inspirations ? user.user.inspirations[1] : '';
 	const iValue2 =
-		user && user.user.inspirations ? user.user.inspirations[2] : ''
-	const aboutValue = user && user.user.about ? user.user.about : ''
-	const whyValue = user && user.user.why ? user.user.why : ''
+		user && user.user.inspirations ? user.user.inspirations[2] : '';
+	const aboutValue = user && user.user.about ? user.user.about : '';
+	const whyValue = user && user.user.why ? user.user.why : '';
 
 	async function handleUpdate(data: UpdateProfileInput, setErrors: Function) {
 		try {
@@ -31,22 +31,22 @@ export default function UpdateProfileForm() {
 				},
 				update(_, { data }) {
 					if (data) {
-						const { updateProfile: userData } = data
-						updateUser(userData)
-						history.push('/profile')
+						const { updateProfile: userData } = data;
+						updateUser(userData);
+						history.push('/profile');
 					}
 				},
-			})
-		} catch (error) {
-			const errors: { [key: string]: string } = {}
+			});
+		} catch (error: any) {
+			const errors: { [key: string]: string } = {};
 			error.graphQLErrors[0].extensions.exception.validationErrors.forEach(
 				(validationErr: any) => {
 					Object.values(validationErr.constraints).forEach((message: any) => {
-						errors[validationErr.property] = message
-					})
+						errors[validationErr.property] = message;
+					});
 				}
-			)
-			setErrors(errors)
+			);
+			setErrors(errors);
 		}
 	}
 
@@ -121,5 +121,5 @@ export default function UpdateProfileForm() {
 				</div>
 			)}
 		</Formik>
-	)
+	);
 }

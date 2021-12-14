@@ -1,48 +1,48 @@
-import { subYears } from 'date-fns'
-import { Field, Formik } from 'formik'
-import { useHistory } from 'react-router-dom'
-import { Button, Form } from 'semantic-ui-react'
-import { useAuthContext } from '../../context/auth/auth'
+import { subYears } from 'date-fns';
+import { Field, Formik } from 'formik';
+import { useHistory } from 'react-router-dom';
+import { Button, Form } from 'semantic-ui-react';
+import { useAuthContext } from '../../context/auth/auth';
 import {
 	RegisterUserInput,
 	useRegisterUserMutation,
-} from '../../types/generated/graphql'
-import { registerValidation } from '../../validation'
-import FormError from '../form/FormError'
-import MyDatePicker from '../form/MyDatePicker'
-import MySelect from '../form/MySelect'
-import { genderOptions, registerUserValues } from './registerValues'
+} from '../../types/generated/graphql';
+import { registerValidation } from '../../validation';
+import FormError from '../form/FormError';
+import MyDatePicker from '../form/MyDatePicker';
+import MySelect from '../form/MySelect';
+import { genderOptions, registerUserValues } from './registerValues';
 
 export default function RegisterForm() {
-	const context = useAuthContext()
-	const [registerUser, { loading }] = useRegisterUserMutation()
-	const history = useHistory()
+	const context = useAuthContext();
+	const [registerUser, { loading }] = useRegisterUserMutation();
+	const history = useHistory();
 
 	async function register(newUserData: RegisterUserInput, setErrors: Function) {
 		try {
 			await registerUser({
 				update(_, { data }) {
 					if (data) {
-						const { registerUser: userData } = data
-						context.login(userData)
-						history.push('/')
+						const { registerUser: userData } = data;
+						context.login(userData);
+						history.push('/');
 					}
 				},
 
 				variables: {
 					registerUserInput: newUserData,
 				},
-			})
-		} catch (error) {
-			const errors: { [key: string]: string } = {}
+			});
+		} catch (error: any) {
+			const errors: { [key: string]: string } = {};
 			error.graphQLErrors[0].extensions.exception.validationErrors.forEach(
 				(validationErr: any) => {
 					Object.values(validationErr.constraints).forEach((message: any) => {
-						errors[validationErr.property] = message
-					})
+						errors[validationErr.property] = message;
+					});
 				}
-			)
-			setErrors(errors)
+			);
+			setErrors(errors);
 		}
 	}
 
@@ -145,5 +145,5 @@ export default function RegisterForm() {
 				</div>
 			)}
 		</Formik>
-	)
+	);
 }
