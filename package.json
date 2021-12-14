@@ -10,9 +10,10 @@
 	"scripts": {
 		"start": "node server/dist/index.js",
 		"postinstall": "cd server && tsc ",
+		"build:server": "cd server && tsc ",
 		"test": "cd server && tsc && npm run build-client",
 		"build-client": "cd client && npm i && npm run build",
-		"watch-node": "nodemon server/dist/index.js",
+		"serve:dev": "nodemon server/dist/index.js",
 		"heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
 	},
 	"keywords": [],
