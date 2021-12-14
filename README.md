@@ -12,7 +12,7 @@
 
 </p>
 
-> A Nutrition tracker built in with MongoDb, Express, React, Node, GraphQL and the Food Center API.
+> A Nutrition tracker built in TypeScript with MongoDb, Express, React, Node, GraphQL and the Food Center API.
 
 ## Prerequisites
 
